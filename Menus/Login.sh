@@ -1,0 +1,10 @@
+#!bin/bash
+echo "========Login========"
+echo "0.返回主菜单"
+echo "1.修改root密码"
+echo "2.新建用户"
+echo "3.安装密钥"
+echo "4.管理ssh登录方式"
+echo "5.更换ssh端口"
+echo "6.ssh二次验证"
+echo "========Login========"
