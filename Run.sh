@@ -6,9 +6,13 @@ fi
 
 
 declare -a pick_array
-declare pick_number=0
-
+declare pick_number
 declare pick
+
+while true
+do
+
+pick_number=0
 echo "======Linux工具箱======"
 cd Menus
 for i in *
@@ -26,3 +30,5 @@ if [[ "${pick}" -gt 0 && "${pick}" -le "${#pick_array[*]}" ]];then
 else
     exit
 fi
+
+done
