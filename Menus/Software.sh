@@ -24,7 +24,7 @@ soft_array[6]='zsh'
 
 
 echo "======一键安装常用软件======"
-for i in ${soft_array[@]}
+for i in "${soft_array[@]}"
 do
     read -p "是否安装${i},输入 n 取消安装：" pick
     if [[ ! $pick =~ [Nn] ]];then
