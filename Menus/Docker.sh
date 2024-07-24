@@ -92,8 +92,7 @@ elif [[ "${pick}" -gt "$((${pick_number}-${#pick_array[*]}))" && "${pick}" -le "
     fi
 
     bash Config/Docker/${pick_array[${pick}]}.sh "$file_path" "$port"
-    echo "访问链接：http://127.0.0.1:${port}"
-    echo "${pick_array[${pick}]}安装完成"
+    echo "${pick_array[${pick}]}安装完成,访问端口${port}"
 fi
 
 

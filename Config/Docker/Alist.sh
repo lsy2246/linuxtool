@@ -14,8 +14,7 @@ services:
     ports:
       - "${port}:5244"
 EOF
-sudo docker compose up -d | "安装失败" $$ exit
-declare password=$( docker exec -it alist ./alist admin random )
+sudo docker compose up -d || "安装失败" $$ exit
+declare password=$( sudo docker exec -it alist ./alist admin random | grep password | awk '{print $4}')
 echo "账号：admin"
 echo "密码：${password}"
-cd - >> /dev/null
