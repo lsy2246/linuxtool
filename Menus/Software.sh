@@ -55,7 +55,7 @@ if [[ ! $pick_docker =~ [Nn] ]];then
     for i in "${!docker_imgs[@]}"; do
         docker_img_number_pick=$((docker_img_number_pick + 1))
         docker_img_number[$docker_img_number_pick]=$i
-        echo "${docker_img_number_pick}.${docker_img_number[$docker_img_number_pick]}"
+        echo "${docker_img_number_pick}.${i}"
     done
     read -p "请输入需要选择的镜像站：" docker_img_number_pick
     declare docker_img
