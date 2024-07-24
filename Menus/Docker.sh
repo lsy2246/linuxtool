@@ -31,9 +31,7 @@ if [[ $pick == '1' ]];then
     declare -A img_dick
     declare -a img_number
     declare img_pick=0
-    img_dick['中国科技技术大学(默认)']='https://docker.mirrors.ustc.edu.cn'
-    img_dick['阿里云']='https://registry.cn-hangzhou.aliyuncs.com'
-    img_dick['网易云']='http://hub-mirror.c.163.com'
+    img_dick['Daocloud(默认)']='https://docker.m.daocloud.io'
 
     for i in "${!img_dick[@]}";
     do
@@ -43,7 +41,7 @@ if [[ $pick == '1' ]];then
     done
     read -p "请输入要选择的镜像,也可直接输入镜像网站：" img_pick
     if [[ -z $img_pick ]];then
-      declare url='https://docker.mirrors.ustc.edu.cn/'
+      declare url='https://docker.m.daocloud.io'
     elif [[ $img_pick =~ ^[http] ]];then
       declare url=$img_pick
     elif [[ ${img_pick} -le 0 || ${img_pick} -ge ${!img_dick[*]} ]];then
@@ -53,7 +51,7 @@ if [[ $pick == '1' ]];then
       echo "输入错误"
       exit
     fi
-    sudo echo "\"{\"registry-mirrors\": [\"${url}\"]}" > '/etc/docker/daemon.json'
+    sudo echo "{\"registry-mirrors\": [\"${url}\"]}" > "/etc/docker/daemon.json"
     sudo systemctl restart docker
     echo "换源成功"
 
