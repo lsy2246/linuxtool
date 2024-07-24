@@ -31,7 +31,9 @@ if [[ $pick == '1' ]];then
     declare -A img_dick
     declare -a img_number
     declare img_pick=0
-    img_dick['中国科技技术大学(默认)']='https://docker.mirrors.ustc.edu.cn/'
+    img_dick['中国科技技术大学(默认)']='https://docker.mirrors.ustc.edu.cn'
+    img_dick['阿里云']='https://registry.cn-hangzhou.aliyuncs.com'
+    img_dick['网易云']='http://hub-mirror.c.163.com'
 
     for i in "${!img_dick[@]}";
     do
