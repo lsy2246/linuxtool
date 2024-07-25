@@ -29,11 +29,11 @@ echo "========Sources========"
 read -p "请输入：" pick
 
 
-if [[ ${pick} -le 0 || ${pick} -gt  ${#sources_dick[*]} ]];then
-        echo "输入错误"
-        exit
-elif [[ -z $pick ]];then
+if [[ -z $pick ]];then
         declare url='http://mirrors.ustc.edu.cn'
+elif [[ ${pick} -le 0 || ${pick} -gt  ${#sources_dick[*]} ]];then
+          echo "输入错误"
+          exit
 else
         pick=${pcik_array[$pick]}
         declare url=${sources_dick[$pick]}
@@ -43,11 +43,16 @@ fi
 
 case "$version" in
     'bookworm')
-        {
-            echo "deb ${url}/debian/ bookworm main contrib non-free non-free-firmware"
-            echo "deb ${url}/debian/ bookworm-updates main contrib non-free non-free-firmware"
-            echo "deb ${url}/debian/ bookworm-backports main contrib non-free non-free-firmware"
-        } > /etc/apt/sources.list
+        cat > "/etc/apt/sources.list" << EOF
+deb ${url}/debian/ bookworm main contrib non-free non-free-firmware
+deb ${url}/debian/ bookworm-updates main contrib non-free non-free-firmware
+deb ${url}/debian/ bookworm-backports main contrib non-free non-free-firmware
+EOF
         sudo apt-get update
     ;;
+    *)
+        echo "暂不支持该系统配置自动更新软件"
+        exit
 esac
+
+echo "换源成功"

@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 declare pick
 echo "========Login========"
 echo "1.修改root密码"

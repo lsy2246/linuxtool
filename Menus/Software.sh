@@ -21,7 +21,7 @@ soft_array[3]='curl'
 soft_array[4]='git'
 soft_array[5]='ssh'
 soft_array[6]='zsh'
-
+soft_array[7]='zip'
 
 echo "======一键安装常用软件======"
 for i in "${soft_array[@]}"

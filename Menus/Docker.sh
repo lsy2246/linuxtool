@@ -52,7 +52,7 @@ if [[ $pick == '1' ]];then
       exit
     fi
     sudo echo "{\"registry-mirrors\": [\"${url}\"]}" > "/etc/docker/daemon.json"
-    sudo systemctl restart docker
+    sudo systemctl restart docker 2>> /dev/null|| echo "docker 重启失败"
     echo "换源成功"
 
 elif [[ $pick == '2' ]];then
