@@ -68,8 +68,7 @@ case $pick in
       fi
       cat > "${path}/up-docker_compose.sh" << EOF
 #!/bin/bash
-web_path="${web_path}"
-for dir in "\$web_path"/*/; do
+for dir in "${web_path}"/*/; do
         cd "\$dir" || exit
         sudo docker compose pull
         sudo docker compose up -d
