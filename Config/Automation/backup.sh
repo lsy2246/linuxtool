@@ -73,7 +73,7 @@ declare year=$(date +"%Y") #年份
 source "${path}/venv/bin/activate"
 
 for item in "$web_path"/*; do
-    item_name=$(basename "\$item")
+    declare item_name=\$(basename "\$item")
     cd "\$item" || exit
     tar -czf "\${item_name}_\${date_time}.tar.gz" .
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
