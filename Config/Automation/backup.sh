@@ -8,9 +8,8 @@ declare baidu_pick
 declare aliyun_pick
 declare cron
 
-if [[ -f "${path}/update.sh" ]];then
+if [[ -f "${path}/backup.sh" ]];then
   echo "该路径文件已经存在"
-  exit
 fi
 
 
