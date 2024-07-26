@@ -60,7 +60,6 @@ case $pick in
       fi
       if [[ -f "${path}/up-docker_compose.sh" ]];then
         echo "该路径文件已经存在"
-        exit
       fi
       declare web_path
       read -p "请输入数据目录,默认 /var/www ：" web_path

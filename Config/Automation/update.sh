@@ -4,7 +4,6 @@ declare cron=$2
 
 if [[ -f "${path}/update.sh" ]];then
   echo "该路径文件已经存在"
-  exit
 fi
 
 case "$version" in
