@@ -52,19 +52,17 @@ fi
 
 
 if [[ ! $aliyun_pick =~ [Nn] ]];then
-  cd "$path"
   if [[ ! -d aliyunpan ]];then
-    wget https://github.com/tickstep/aliyunpan/releases/download/v0.3.2/aliyunpan-v0.3.2-linux-amd64.zip -O aliyunpan.zip
+    wget -P "${path}" https://github.com/tickstep/aliyunpan/releases/download/v0.3.2/aliyunpan-v0.3.2-linux-amd64.zip -O "${path}/aliyunpan.zip"
     unzip aliyunpan.zip
-    rm aliyunpan.zip
-    declare tmp_file=$( ls | grep aliyunpan )
-    mv $tmp_file aliyunpan
-    cd aliyunpan
-     ./aliyunpan login
+    unzip "${path}/aliyunpan.zip" -d "${path}"
+    rm "${path}/aliyunpan.zip"
+    declare tmp_file=$( ls "${path}" | grep "aliyunpan" )
+    mv "${path}/${tmp_file}" "${path}/aliyunpan"
+    ${path}/aliyunpan/aliyunpan login
   else
     echo "检测到阿里云盘已经存在,请确认是否登录"
-    cd aliyunpan
-    ./aliyunpan who
+    ${path}/aliyunpan/aliyunpan who
   fi
 fi
 
