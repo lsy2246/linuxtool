@@ -52,7 +52,7 @@ fi
 
 
 if [[ ! $aliyun_pick =~ [Nn] ]];then
-  if [[ ! -d aliyunpan ]];then
+  if [[ ! -d "${path}/aliyunpan" ]];then
     wget -P "${path}" https://github.com/tickstep/aliyunpan/releases/download/v0.3.2/aliyunpan-v0.3.2-linux-amd64.zip -O "${path}/aliyunpan.zip"
     unzip aliyunpan.zip
     unzip "${path}/aliyunpan.zip" -d "${path}"
