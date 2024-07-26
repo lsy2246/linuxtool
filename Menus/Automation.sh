@@ -21,13 +21,37 @@ if [[ -z $path ]];then
 fi
 mkdir -p "$path"
 
+echo "执行日期"
+echo "星号（*）：表示匹配任意值"
+echo "逗号（,）：用于分隔多个值"
+echo "斜线（/）：用于指定间隔值"
+echo "连字符（-）：用于指定范围"
+
+declare tmp_time
+declare -a cron_array=("分钟" "小时" "天数" "月份" "星期" )
+for i in "${cron_array[@]}";do
+  read -p "${i}，默认为 * ：" tmp_time
+  if [[ $tmp_time =~ ^[0-9]+$ || $tmp_time == '*' ]];then
+    cron+="${tmp_time} "
+  elif [[ -z ${tmp_time} ]];then
+      cron+='* '
+  else
+    echo "输入错误"
+    exit
+  fi
+done
+if [[ "$cron" == '* * * * * ' ]];then
+   read "该脚本会无时无刻执行，请重新输入"
+   exit
+fi
+
 
 case $pick in
     '1')
-      bash Config/Automation/backup.sh "$path"
+      bash Config/Automation/backup.sh "$path" "$cron"
       ;;
       '2')
-      bash Config/Automation/update.sh "$path"
+      bash Config/Automation/update.sh "$path" "$cron"
       ;;
       '3')
       if ! command -v docker &> /dev/null; then
@@ -61,6 +85,6 @@ EOF
       sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
       ;;
     '4')
-      echo "国内忘写了"
+      echo "糟糕忘写了"
 esac
 echo "配置完成"

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 declare path=$1
+declare cron=$2
 declare web_path
 declare local_pick
 declare baidu_pick
 declare aliyun_pick
-declare -a cron_array=("分钟" "小时" "天数" "月份" "星期" )
 declare cron
 
 if [[ -f "${path}/update.sh" ]];then
@@ -62,32 +62,6 @@ if [[ ! $aliyun_pick =~ [Nn] ]];then
   cd aliyunpan
    ./aliyunpan login
 fi
-
-echo
-echo "执行日期"
-echo "星号（*）：表示匹配任意值"
-echo "逗号（,）：用于分隔多个值"
-echo "斜线（/）：用于指定间隔值"
-echo "连字符（-）：用于指定范围"
-
-declare tmp_time
-for i in "${cron_array[@]}";do
-  read -p "${i}，默认为 * ：" tmp_time
-  if [[ $tmp_time =~ ^[0-9]+$ || $tmp_time == '*' ]];then
-    cron+="${tmp_time} "
-  elif [[ -z ${tmp_time} ]];then
-      cron+='* '
-  else
-    echo "输入错误"
-    exit
-  fi
-done
-if [[ "$cron" == '* * * * * ' ]];then
-   read "该脚本会无时无刻执行，请重新输入"
-   exit
-fi
-
-
 
 cat > "${path}/backup.sh" << EOF
 #!/bin/bash
