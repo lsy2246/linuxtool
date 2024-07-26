@@ -53,6 +53,11 @@ for dir in "\$web_path"/*/; do
 done
 EOF
       chmod +x "${path}/up-docker_compose.sh"
+
+      declare cron_job="${cron} ${path}/up-docker_compose.sh"
+      (crontab -l 2>/dev/null | grep -v "up-docker_compose.sh") | sudo crontab -
+      (crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
+
       sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
       ;;
     '4')

@@ -109,7 +109,8 @@ EOF
 chmod +x "$path/backup.sh"
 
 declare cron_job="${cron} ${path}/backup.sh"
-(crontab -l 2>/dev/null | grep -Fxq "${path}/backup.sh") || (crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
+(crontab -l 2>/dev/null | grep -v "backup.sh") | sudo crontab -
+(crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
 
 sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 
