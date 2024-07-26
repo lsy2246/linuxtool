@@ -63,6 +63,7 @@ if [[ ! $aliyun_pick =~ [Nn] ]];then
      ./aliyunpan login
   else
     echo "检测到阿里云盘已经存在,请确认是否登录"
+    cd aliyunpan
     ./aliyunpan who
   fi
 fi
@@ -71,7 +72,6 @@ cat > "${path}/backup.sh" << EOF
 #!/bin/bash
 declare date_time=$(date +"%Y_%m_%d") # 日期格式
 declare year=$(date +"%Y") #年份
-cd "${path}/aliyunpan"
 source "${path}/venv/bin/activate"
 
 for item in "$web_path"/*; do
@@ -79,7 +79,7 @@ for item in "$web_path"/*; do
     cd "\$item" || exit
     tar -czf "\${item_name}_\${date_time}.tar.gz" .
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
-    ./aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
+    ${path}/aliyunpan/aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
     cp "\${item_name}_\${date_time}.tar.gz" "${web_path}/\${year}/"
     rm "\${item_name}_\${date_time}.tar.gz"
 done
