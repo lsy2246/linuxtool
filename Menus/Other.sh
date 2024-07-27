@@ -25,8 +25,10 @@ case "$pick" in
     read -p "请输入：" lang
     if [[ -f "/usr/bin/apt-get" ]];then
       sudo apt-get install -y locales
+      sudo apt-get install -y language-pack-zh-hans
     elif [[ -f "/usr/bin/apt" ]];then
       sudo apt install -y locales
+      sudo apt install -y language-pack-zh-hans
     else
       echo "暂不支持该系统一键更换语言"
       exit
