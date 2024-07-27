@@ -31,6 +31,7 @@ case "$pick" in
       echo "暂不支持该系统一键更换语言"
       exit
     fi
+    sudo sed -i '/^#/! s/^/# /' /etc/locale.gen
     case $lang in
     '1')
       sudo sed -i 's/.*zh_CN.UTF-8.*/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
