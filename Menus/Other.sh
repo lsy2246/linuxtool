@@ -42,19 +42,15 @@ case "$pick" in
       sudo sed -i 's/.*zh_CN.UTF-8.*/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
       sudo sed -i "s/^LANG.*/LANG=zh_CN.UTF-8/g" /etc/default/locale
       sudo sed -i "s/^LC_ALL.*/LC_ALL=zh_CN.UTF-8/g" /etc/default/locale
-      source /etc/default/locale
-      sudo locale-gen
-      update-locale
-      echo "中文语言更换成功"
       ;;
     '2')
       sudo sed -i 's/.*en_US.UTF-8.*/en_US.UTF-8 UTF-8/g' /etc/locale.gen
       sudo sed -i "s/^LANG.*/LANG=en_US.UTF-8/g" /etc/default/locale
       sudo sed -i "s/^LC_ALL.*/LC_ALL=en_US.UTF-8/g" /etc/default/locale
-      source /etc/default/locale
-      sudo locale-gen
-      update-locale
-      echo "英文语言更换成功"
       ;;
     esac
+    sudo locale-gen
+    update-locale
+    source /etc/default/locale
+    echo "英文语言更换成功"
 esac
