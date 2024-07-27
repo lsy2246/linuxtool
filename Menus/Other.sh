@@ -32,6 +32,9 @@ case "$pick" in
       exit
     fi
     sudo sed -i '/^#/! s/^/# /' /etc/locale.gen
+    if ! grep LC_ALL /etc/default/locale &> /dev/null; then
+        echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
+    fi
     case $lang in
     '1')
       sudo sed -i 's/.*zh_CN.UTF-8.*/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
