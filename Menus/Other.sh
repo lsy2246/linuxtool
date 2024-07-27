@@ -52,5 +52,5 @@ case "$pick" in
     sudo locale-gen
     update-locale
     source /etc/default/locale
-    echo "英文语言更换成功"
+    echo "语言更换成功"
 esac
