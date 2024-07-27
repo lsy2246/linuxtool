@@ -19,7 +19,7 @@ if [[ -z ${web_path} ]];then
 fi
 read -p "是否备份到本地，默认 关闭 ，输入 y 开启：" local_pick
 read -p "是否备份到百度网盘，默认 开启 ，输入 n 关闭：" baidu_pick
-read -p "是否备份到阿里云盘 默认 开启 ， 输入 n 关闭" aliyun_pick
+read -p "是否备份到阿里云盘 默认 开启 ， 输入 n 关闭：" aliyun_pick
 
 if [[ ! $local_pick =~ [Yy] && $baidu_pick =~ [Nn] && $aliyun_pick =~ [Nn] ]];then
   echo "没有可备份的选项"
@@ -39,7 +39,16 @@ if [[ $local_pick =~ Yy ]];then
 fi
 
 if [[ ! $baidu_pick =~ [Nn] ]];then
-  sudo apt-get install python3-venv -y
+  if ! command -v python3 -m venv  &> /dev/null ; then
+     if [[ -f "/usr/bin/apt-get" ]];then
+       sudo apt-get install python3-venv -y
+     elif [[ -f "/usr/bin/apt" ]];then
+       sudo apt-get install python3-venv -y
+     else
+       echo "无法自动安装 python3-venv 请手动安装"
+       exit
+     fi
+   fi
   python3 -m venv "${path}/venv"
   source "${path}/venv/bin/activate"
   pip install bypy
@@ -54,11 +63,9 @@ fi
 if [[ ! $aliyun_pick =~ [Nn] ]];then
   if [[ ! -d "${path}/aliyunpan" ]];then
     wget -P "${path}" https://github.com/tickstep/aliyunpan/releases/download/v0.3.2/aliyunpan-v0.3.2-linux-amd64.zip -O "${path}/aliyunpan.zip"
-    unzip aliyunpan.zip
     unzip "${path}/aliyunpan.zip" -d "${path}"
     rm "${path}/aliyunpan.zip"
-    declare tmp_file=$( ls "${path}" | grep "aliyunpan" )
-    mv "${path}/${tmp_file}" "${path}/aliyunpan"
+    mv "${path}/$(ls "${path}" | grep "aliyunpan")" "${path}/aliyunpan"
     ${path}/aliyunpan/aliyunpan login
   else
     echo "检测到阿里云盘已经存在,请确认是否登录"

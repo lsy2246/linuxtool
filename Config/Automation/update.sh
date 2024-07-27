@@ -1,4 +1,3 @@
-declare version=$(cat /etc/os-release | grep '^ID' | awk -F '=' '{print $2}')
 declare path=$1
 declare cron=$2
 
@@ -6,20 +5,19 @@ if [[ -f "${path}/update.sh" ]];then
   echo "该路径文件已经存在"
 fi
 
-case "$version" in
-    'debian')
-        cat > "${path}/update.sh" << EOF
-#!/bin/bash
-sudo apt update
-sudo apt-get update
-sudo apt dist-upgrade
-sudo apt-get dist-upgrade
-EOF
-        ;;
-    *)
-        echo "暂不支持该系统配置自动更新软件"
-        exit
-esac
+echo '#!/bin/bash' > "${path}/update.sh"
+
+if [[ -f "/usr/bin/apt" ]];then
+  echo 'sudo apt update' >> "${path}/update.sh"
+  echo 'sudo apt-get dist-upgrade' >> "${path}/update.sh"
+elif [[ -f "/usr/bin/apt-get" ]];then
+    echo 'sudo apt-get update' >> "${path}/update.sh"
+    echo 'sudo apt dist-upgrade' >> "${path}/update.sh"
+else
+  rm "${path}/update.sh"
+  echo "暂不支持该系统配置自动更新软件"
+  exit
+fi
 
 chmod +x "${path}/update.sh"
 

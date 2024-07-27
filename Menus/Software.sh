@@ -1,16 +1,17 @@
 #!/bin/bash
 
 declare install_str
-declare version=$(cat /etc/os-release | grep -w 'ID' | awk -F '=' '{print $2}')
-case "$version" in
-    'debian')
-    install_str='apt-get install'   
-        
-        ;;
-    *)
-        echo "暂不支持该系统一键安装常用软件"
-        exit
-esac
+
+declare pkg
+if [[ -f "/usr/bin/apt-get" ]];then
+  pkg='apt-get'
+elif [[ -f "/usr/bin/apt" ]];then
+  pkg='apt'
+else
+  echo "暂不支持该系统一键安装常用软件"
+  exit
+fi
+
 
 declare pick
 declare -a soft_array
@@ -62,7 +63,7 @@ if [[ ! $pick_docker =~ [Nn] ]];then
     read -p "请输入需要选择的镜像站：" docker_img_number_pick
     declare docker_img
     if [[ ! $docker_img_number_pick =~ [1-${#docker_imgs[@]}] ]];then
-        docker_img='https://mirrors.ustc.edu.cn/docker-ce'
+        docker_img='https://mirrors.sustc.edu.cn/docker-ce'
     else
         docker_img_number_pick=${docker_img_number[$docker_img_number_pick]}
         docker_img=${docker_imgs[$docker_img_number_pick]}
@@ -76,7 +77,7 @@ if [[ ! $pick_x =~ [Nn] ]];then
 fi
 
 
-eval "$install_str -y"
+eval "sudo ${pkg} install -y ${install_str}"
 if [[ ! $pick_x =~ [Nn] ]];then
     eval "$(curl https://get.x-cmd.com)"
 fi
@@ -93,9 +94,9 @@ fi
 
 
 if [[ ! $pick_docker =~ [Nn] ]];then
-    if [[ $version == 'debian' ]];then
-        sudo apt-get update
-        sudo apt-get install ca-certificates curl -y
+    if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then
+        sudo ${pkg} update
+        sudo ${pkg} install ca-certificates curl -y
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL "${docker_img}/linux/${version}/gpg" -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -103,8 +104,8 @@ if [[ ! $pick_docker =~ [Nn] ]];then
           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] ${docker_img}/linux/${version} \
           $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        sudo apt-get update
-        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+        sudo ${pkg} update
+        sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     fi
 fi
 

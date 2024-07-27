@@ -48,6 +48,7 @@ deb ${url}/debian/ bookworm main contrib non-free non-free-firmware
 deb ${url}/debian/ bookworm-updates main contrib non-free non-free-firmware
 deb ${url}/debian/ bookworm-backports main contrib non-free non-free-firmware
 EOF
+        sudo apt update
         sudo apt-get update
     ;;
     *)
