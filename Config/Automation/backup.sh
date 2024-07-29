@@ -82,7 +82,7 @@ source "${path}/venv/bin/activate"
 for item in "$web_path"/*; do
     declare item_name=\$(basename "\$item")
     cd "\$item" || exit
-    tar -czf "\${item_name}_\${date_time}.tar.gz" .
+    tar -czf "\${item_name}_\${date_time}.tar.gz" $(ls)
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
     ${path}/aliyunpan/aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
     cp "\${item_name}_\${date_time}.tar.gz" "${web_path}/\${year}/"
