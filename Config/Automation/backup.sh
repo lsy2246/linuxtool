@@ -76,7 +76,7 @@ fi
 cat > "${path}/backup.sh" << EOF
 #!/bin/bash
 declare date_time=$(date +"%Y_%m_%d") # 日期格式
-declare year=$(date +"%Y") #年份
+declare year=\$(date +"%Y") #年份
 source "${path}/venv/bin/activate"
 
 for item in "$web_path"/*; do
