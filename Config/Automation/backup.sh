@@ -66,10 +66,9 @@ if [[ ! $aliyun_pick =~ [Nn] ]];then
     unzip "${path}/aliyunpan.zip" -d "${path}"
     rm "${path}/aliyunpan.zip"
     mv "${path}/$(ls "${path}" | grep "aliyunpan")" "${path}/aliyunpan"
+  fi
+  if [[ "$( ${path}/aliyunpan/aliyunpan who)" == "未登录账号" ]];then
     ${path}/aliyunpan/aliyunpan login
-  else
-    echo "检测到阿里云盘已经存在,请确认是否登录"
-    ${path}/aliyunpan/aliyunpan who
   fi
 fi
 

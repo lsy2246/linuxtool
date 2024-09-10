@@ -19,10 +19,9 @@ soft_array[0]='git'
 soft_array[1]='vim'
 soft_array[2]='wget'
 soft_array[3]='curl'
-soft_array[4]='git'
-soft_array[5]='ssh'
-soft_array[6]='zsh'
-soft_array[7]='zip'
+soft_array[4]='ssh'
+soft_array[5]='zsh'
+soft_array[6]='zip'
 
 echo "======一键安装常用软件======"
 for i in "${soft_array[@]}"
