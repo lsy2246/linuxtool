@@ -5,8 +5,10 @@ declare install_str
 declare pkg
 if [[ -f "/usr/bin/apt-get" ]];then
   pkg='apt-get'
+  sudo apt-get update
 elif [[ -f "/usr/bin/apt" ]];then
   pkg='apt'
+  sudo apt dist-upgrade
 else
   echo "暂不支持该系统一键安装常用软件"
   exit
