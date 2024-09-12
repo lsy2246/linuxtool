@@ -86,17 +86,6 @@ if [[ ! $pick_x =~ [Nn] ]];then
     eval "$(curl https://get.x-cmd.com)"
 fi
 
-if [[ ! $pick_zsh =~ [Nn] ]];then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    sudo sed -i 's/^#\?ZSH_THEME.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
-    sudo sed -i 's/^#\?plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions command-not-found)/g' ~/.zshrc
-    zsh
-fi
-
-
 if [[ ! $pick_docker =~ [Nn] ]];then
     if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then
         sudo ${pkg} update
@@ -112,5 +101,18 @@ if [[ ! $pick_docker =~ [Nn] ]];then
         sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     fi
 fi
+
+
+if [[ ! $pick_zsh =~ [Nn] ]];then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    zsh
+    git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    sudo sed -i 's/^#\?ZSH_THEME.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
+    sudo sed -i 's/^#\?plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions command-not-found)/g' ~/.zshrc
+fi
+
+
 
 echo "软件已经全部安装成功"
