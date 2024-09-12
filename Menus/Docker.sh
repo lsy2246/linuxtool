@@ -36,7 +36,7 @@ if [[ $pick == '1' ]];then
     for i in "${!img_dick[@]}";
     do
       img_pick=$(( img_pick+1 ))
-      declare[$img_pick]=$i
+      img_number[$img_pick]=$i
       echo "${img_pick}.${i}"
     done
     read -p "请输入要选择的镜像,也可直接输入镜像网站：" img_pick

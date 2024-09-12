@@ -39,16 +39,14 @@ if [[ $local_pick =~ Yy ]];then
 fi
 
 if [[ ! $baidu_pick =~ [Nn] ]];then
-  if ! command -v python3 -m venv  &> /dev/null ; then
-     if [[ -f "/usr/bin/apt-get" ]];then
-       sudo apt-get install python3-venv -y
-     elif [[ -f "/usr/bin/apt" ]];then
-       sudo apt-get install python3-venv -y
-     else
-       echo "无法自动安装 python3-venv 请手动安装"
-       exit
-     fi
-   fi
+  if [[ -f "/usr/bin/apt-get" ]];then
+     sudo apt-get install python3-venv -y
+  elif [[ -f "/usr/bin/apt" ]];then
+     sudo apt-get install python3-venv -y
+  else
+     echo "无法自动安装 python3-venv 请手动安装"
+     exit
+  fi
   python3 -m venv "${path}/venv"
   source "${path}/venv/bin/activate"
   pip install bypy

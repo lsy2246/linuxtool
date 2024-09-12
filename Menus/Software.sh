@@ -1,6 +1,7 @@
 #!/bin/bash
 
 declare install_str
+declare version="$(cat /etc/os-release | grep "^ID" | awk -F '=' '{print $2}')"
 
 declare pkg
 if [[ -f "/usr/bin/apt-get" ]];then
