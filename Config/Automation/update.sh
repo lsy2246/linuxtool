@@ -1,5 +1,5 @@
-declare path=$1
-declare cron=$2
+declare path="$1"
+declare cron="$2"
 
 if [[ -f "${path}/update.sh" ]];then
   echo "该路径文件已经存在"

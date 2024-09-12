@@ -1,7 +1,7 @@
 #!/bin/bash
 
-declare path=$1
-declare cron=$2
+declare path="$1"
+declare cron="$2"
 declare web_path
 declare local_pick
 declare baidu_pick
@@ -92,7 +92,6 @@ chmod +x "$path/backup.sh"
 
 declare cron_job="${cron} ${path}/backup.sh"
 (crontab -l 2>/dev/null | grep -v "backup.sh") | sudo crontab -
-(crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
 
 sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 
