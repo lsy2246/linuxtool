@@ -10,7 +10,7 @@ IMAGE_TAG=latest
 MGT_PORT=$port
 POSTGRES_PASSWORD="safeline"
 SUBNET_PREFIX=172.22.222
-IMAGE_PREFIX=chaitin
+IMAGE_PREFIX=swr.cn-east-3.myhuaweicloud.com/chaitin-safeline
 EOF
 sudo docker compose up -d || "安装失败" $$ exit
 declare password=$( docker exec safeline-mgt resetadmin | grep password | awk -F "：" '{print $2}' )
