@@ -24,9 +24,13 @@ case "$pick" in
     echo "2.英文"
     read -p "请输入：" lang
     if [[ -f "/usr/bin/apt-get" ]];then
+      sudo apt-get update
+      sudo apt-get dist-upgrade
       sudo apt-get install -y locales
       sudo apt-get install -y language-pack-zh-hans
     elif [[ -f "/usr/bin/apt" ]];then
+      sudo apt update
+      sudo apt dist-upgrade
       sudo apt install -y locales
       sudo apt install -y language-pack-zh-hans
     else
