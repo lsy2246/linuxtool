@@ -14,4 +14,10 @@ for i in "${!vpn_array[@]}";do
   vpn_number=$((vpn_number+1))
 done
 read -p "请输入要选择的序号：" vpn_pick
-vpn_array[${vpn_number[$vpn_pick]}]
+
+if [[ -z ${vpn_array[${vpn_number[$vpn_pick]}]} ]];then
+  echo "输入错误"
+else
+  echo "${vpn_array[${vpn_number[$vpn_pick]}]}"
+fi
+
