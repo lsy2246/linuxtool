@@ -18,7 +18,7 @@ read -p "请输入要选择的序号：" vpn_pick
 if [[ -z ${vpn_array[${vpn_index[$vpn_pick]}]} ]];then
   echo "输入错误"
 else
-  eval"${vpn_array[${vpn_index[$vpn_pick]}]}"
+  eval "${vpn_array[${vpn_index[$vpn_pick]}]}"
   echo "安装完成"
 fi
 
