@@ -19,5 +19,6 @@ if [[ -z ${vpn_array[${vpn_index[$vpn_pick]}]} ]];then
   echo "输入错误"
 else
   ${vpn_array[${vpn_index[$vpn_pick]}]}
+  echo "安装完成"
 fi
 
