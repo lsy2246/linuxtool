@@ -20,7 +20,7 @@ if [[ -z ${web_path} ]];then
 fi
 
 for item in "$web_path"/* ; do
-    [[ $ignore -eq 1 ]] && echo "当前脚本会备份的目录如下"
+    [[ $ignore -eq 1 ]] && echo "当前脚本会备份的目录如下" && ignore=
     declare item_name=$(basename "$item")
     echo "${item_name}"
 done
@@ -38,7 +38,7 @@ if [[ ! $local_pick =~ [Yy] && $baidu_pick =~ [Nn] && $aliyun_pick =~ [Nn] ]];th
   exit
 fi
 
-if [[ $local_pick =~ Yy ]];then
+if [[ $local_pick =~ [Yy] ]];then
   declare loacl_path
   read -p "请输入本地备份路径,默认 /var/webbackup ：" loacl_path
   if [[ -z $loacl_path ]];then
@@ -86,7 +86,7 @@ cat > "${path}/backup.sh" << EOF
 declare date_time=\$(date +"%Y_%m_%d") # 日期格式
 declare year=\$(date +"%Y") #年份
 declare ignore=$ignore
-source "${path}/venv/bin/activate"
+source \"${path}/venv/bin/activate\"
 
 for item in "$web_path"/*; do
     declare item_name=\$(basename "\$item")
@@ -108,7 +108,7 @@ declare cron_job="${cron} ${path}/backup.sh"
 
 sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 
-if [[ $local_pick == [Yn] ]];then
+if [[ $local_pick == [Yy] ]];then
   echo "本地备份路径：${web_path}/年份/目录名称"
 else
   sed -i '/cp.*/d' "${path}/backup.sh"
