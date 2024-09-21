@@ -48,10 +48,10 @@ fi
 
 case $pick in
     '1')
-      bash Config/Automation/backup.sh "$path" "$cron"
+      bash "${PWD}/Config/Automation/backup.sh" "$path" "$cron"
       ;;
       '2')
-      bash Config/Automation/update.sh "$path" "$cron"
+      bash "${PWD}/Config/Automation/update.sh" "$path" "$cron"
       ;;
       '3')
       if ! command -v docker &> /dev/null; then

@@ -48,8 +48,8 @@ deb ${url}/debian/ bookworm main contrib non-free non-free-firmware
 deb ${url}/debian/ bookworm-updates main contrib non-free non-free-firmware
 deb ${url}/debian/ bookworm-backports main contrib non-free non-free-firmware
 EOF
-        sudo apt update
-        sudo apt-get update
+        sudo apt update -y
+        sudo apt-get update -y
     ;;
     *)
         echo "暂不支持该系统配置自动更新软件"

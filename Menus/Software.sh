@@ -5,13 +5,13 @@ declare version="$(cat /etc/os-release | grep "^ID" | awk -F '=' '{print $2}')"
 
 declare pkg
 if [[ -f "/usr/bin/apt-get" ]];then
-  pkg='apt-get'
-  sudo apt-get update
-  sudo apt-get dist-upgrade
+  pkg='apt-get install -y'
+  sudo apt-get update -y
+  sudo apt-get dist-upgrade -y
 elif [[ -f "/usr/bin/apt" ]];then
-  pkg='apt'
-  sudo apt update
-  sudo apt dist-upgrade
+  pkg='apt install -y'
+  sudo apt update -y
+  sudo apt dist-upgrade -y
 else
   echo "暂不支持该系统一键安装常用软件"
   exit
@@ -81,13 +81,13 @@ if [[ ! $pick_x =~ [Nn] ]];then
 fi
 
 
-eval "sudo ${pkg} install -y ${install_str}"
+eval "sudo ${pkg} ${install_str}"
 if [[ ! $pick_x =~ [Nn] ]];then
     eval "$(curl https://get.x-cmd.com)"
 fi
 
 if [[ ! $pick_docker =~ [Nn] ]];then
-    if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then
+    if [[ ${pkg} =~ '^apt' || ${pkg} =~ '^apt-get' ]];then
         sudo ${pkg} update
         sudo ${pkg} install ca-certificates curl -y
         sudo install -m 0755 -d /etc/apt/keyrings
@@ -104,13 +104,16 @@ fi
 
 
 if [[ ! $pick_zsh =~ [Nn] ]];then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    zsh
+    curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
+    while [[ ! -d "$HOME/.oh-my-zsh" ]]; do
+        sleep 3
+    done
     git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     sudo sed -i 's/^#\?ZSH_THEME.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
     sudo sed -i 's/^#\?plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions command-not-found)/g' ~/.zshrc
+    source ~/.zshrc
 fi
 
 

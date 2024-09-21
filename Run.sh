@@ -14,7 +14,7 @@ do
 
 pick_number=0
 echo "======Linux工具箱======"
-cd Menus
+cd Menus || exit
 for i in *
 do
     pick_number=$((pick_number + 1))
@@ -26,7 +26,7 @@ echo "======Linux工具箱======"
 read -p "请输入要使用的功能：" pick
 if [[ "${pick}" -gt 0 && "${pick}" -le "${#pick_array[*]}" ]];then
     clear
-    bash Menus/${pick_array[$pick]}.sh
+    bash "${PWD}/Menus/${pick_array[$pick]}.sh"
 else
     exit
 fi
