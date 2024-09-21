@@ -2,14 +2,6 @@
 
 declare version=$(cat /etc/os-release | grep VERSION_CODENAME | awk -F '=' '{print $2}')
 
-case "$version" in
-    'bookworm')
-        ;;
-    *)
-        echo "暂不支持该系统一键换源"
-        exit
-esac
-
 declare -A sources_dick
 sources_dick['中国科技技术大学(默认)']='http://mirrors.ustc.edu.cn'
 sources_dick['清华大学']='https://mirrors.tuna.tsinghua.edu.cn'
@@ -52,7 +44,7 @@ EOF
         sudo apt-get update -y
     ;;
     *)
-        echo "暂不支持该系统配置自动更新软件"
+        echo "暂不支持该系统一键换源"
         exit
 esac
 

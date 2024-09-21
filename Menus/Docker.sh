@@ -15,13 +15,11 @@ echo "========Docker========"
 echo "1.换源"
 echo "2.清除所有未使用镜像"
 echo "-----一键搭建软件-----"
-cd "Config/Docker"
-for i in *;do
+for i in "${path_script}/Config/Docker"/*;do
     pick_number=$((pick_number + 1))
-    pick_array[$pick_number]=$(awk -F '.' '{print $1}' <<< "$i")
+    pick_array[$pick_number]=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
     echo "${pick_number}.${pick_array[$pick_number]}"
 done
-cd - >> /dev/null
 echo "-----一键搭建软件-----"
 echo "任意输入返回主菜单"
 echo "========Docker========"
