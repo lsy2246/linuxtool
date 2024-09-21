@@ -104,7 +104,7 @@ fi
 
 
 if [[ ! $pick_zsh =~ [Nn] ]];then
-    curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     while [[ ! -d "$HOME/.oh-my-zsh" ]]; do
         sleep 3
     done
@@ -113,7 +113,7 @@ if [[ ! $pick_zsh =~ [Nn] ]];then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     sudo sed -i 's/^#\?ZSH_THEME.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
     sudo sed -i 's/^#\?plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions command-not-found)/g' ~/.zshrc
-    source ~/.zshrc
+    exec zsh
 fi
 
 
