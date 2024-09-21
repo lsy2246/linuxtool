@@ -14,10 +14,14 @@ if [[ -f "${path}/backup.sh" ]];then
   echo "该路径文件已经存在"
 fi
 
+read -p "请输入数据目录,默认 /var/www ：" web_path
+if [[ -z ${web_path} ]];then
+  web_path='/var/www'
+fi
 
-for item in "$web_path"/ ; do
+for item in "$web_path"/* ; do
     [[ $ignore -eq 1 ]] && echo "当前脚本会备份的目录如下"
-    declare item_name=$(basename "\$item")
+    declare item_name=$(basename "$item")
     echo "${ignore}.${item_name}"
     ignore=[[$ignore+1]]
 done
@@ -25,10 +29,7 @@ done
 echo "请输入需要屏蔽的目录用逗号隔开"
 read -p "请输入" ignore
 
-read -p "请输入数据目录,默认 /var/www ：" web_path
-if [[ -z ${web_path} ]];then
-  web_path='/var/www'
-fi
+
 read -p "是否备份到本地，默认 关闭 ，输入 y 开启：" local_pick
 read -p "是否备份到百度网盘，默认 开启 ，输入 n 关闭：" baidu_pick
 read -p "是否备份到阿里云盘 默认 开启 ， 输入 n 关闭：" aliyun_pick
