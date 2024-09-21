@@ -104,7 +104,7 @@ fi
 
 
 if [[ ! $pick_zsh =~ [Nn] ]];then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    (sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)")
     while [[ ! -d "$HOME/.oh-my-zsh" ]]; do
         sleep 3
     done
