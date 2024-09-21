@@ -14,14 +14,12 @@ do
 
 pick_number=0
 echo "======Linux工具箱======"
-cd Menus || exit
-for i in *
+for i in "${PWD}/Menus/"*
 do
     pick_number=$((pick_number + 1))
-    pick_array[$pick_number]=$(awk -F '.' '{print $1}' <<< "$i")
+    pick_array[$pick_number]=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
     echo "${pick_number}.${pick_array[$pick_number]}"
 done
-cd - >> /dev/null
 echo "======Linux工具箱======"
 read -p "请输入要使用的功能：" pick
 if [[ "${pick}" -gt 0 && "${pick}" -le "${#pick_array[*]}" ]];then
