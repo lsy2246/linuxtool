@@ -57,7 +57,6 @@ if [[ ! $pick_docker =~ [Nn] ]];then
     docker_imgs['阿里云']='https://mirrors.aliyun.com/docker-ce'
     docker_imgs['网易云']='https://mirrors.163.com/docker-ce'
 
-
     declare -a docker_img_number
     declare docker_img_number_pick=0
     
