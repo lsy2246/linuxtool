@@ -7,11 +7,23 @@ declare local_pick
 declare baidu_pick
 declare aliyun_pick
 declare cron
+declare ignore=1
+
 
 if [[ -f "${path}/backup.sh" ]];then
   echo "该路径文件已经存在"
 fi
 
+
+for item in "$web_path"/ ; do
+    [[ $ignore -eq 1 ]] && echo "当前脚本会备份的目录如下"
+    declare item_name=$(basename "\$item")
+    echo "${ignore}.${item_name}"
+    ignore=[[$ignore+1]]
+done
+
+echo "请输入需要屏蔽的目录用逗号隔开"
+read -p "请输入" ignore
 
 read -p "请输入数据目录,默认 /var/www ：" web_path
 if [[ -z ${web_path} ]];then
@@ -22,10 +34,9 @@ read -p "是否备份到百度网盘，默认 开启 ，输入 n 关闭：" baid
 read -p "是否备份到阿里云盘 默认 开启 ， 输入 n 关闭：" aliyun_pick
 
 if [[ ! $local_pick =~ [Yy] && $baidu_pick =~ [Nn] && $aliyun_pick =~ [Nn] ]];then
-  echo "没有可备份的选项"
+  echo "没有选择备份的选项"
   exit
 fi
-
 
 if [[ $local_pick =~ Yy ]];then
   declare loacl_path
@@ -74,10 +85,14 @@ cat > "${path}/backup.sh" << EOF
 #!/bin/bash
 declare date_time=\$(date +"%Y_%m_%d") # 日期格式
 declare year=\$(date +"%Y") #年份
+declare ignore=$ignore
 source "${path}/venv/bin/activate"
 
 for item in "$web_path"/*; do
     declare item_name=\$(basename "\$item")
+    if [[ "\$ignore" =~ "\$item" ]];then
+          continue
+    fi
     cd "\$item" || exit
     tar -czf "\${item_name}_\${date_time}.tar.gz" \$(ls)
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
