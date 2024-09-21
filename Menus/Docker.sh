@@ -1,5 +1,7 @@
 #!/bin/bash
 
+declare path_script=$1
+
 if ! command -v docker &> /dev/null; then
     echo "docker未安装"
     exit
@@ -91,7 +93,7 @@ elif [[ "${pick}" -gt "$((${pick_number}-${#pick_array[*]}))" && "${pick}" -le "
       exit
     fi
 
-    bash "${PWD}/Config/Docker/${pick_array[${pick}]}.sh" "$file_path" "$port"
+    bash "${path_script}/Config/Docker/${pick_array[${pick}]}.sh" "$file_path" "$port"
     echo "${pick_array[${pick}]}安装完成,访问端口${port}"
 fi
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+declare path_script=$1
 declare pick
 echo "========Automation========"
 echo "1.自动备份"
@@ -48,10 +49,10 @@ fi
 
 case $pick in
     '1')
-      bash "${PWD}/Config/Automation/backup.sh" "$path" "$cron"
+      bash "${path_script}/Config/Automation/backup.sh" "$path" "$cron"
       ;;
       '2')
-      bash "${PWD}/Config/Automation/update.sh" "$path" "$cron"
+      bash "${path_script}/Config/Automation/update.sh" "$path" "$cron"
       ;;
       '3')
       if ! command -v docker &> /dev/null; then
