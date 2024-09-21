@@ -90,7 +90,7 @@ source \"${path}/venv/bin/activate\"
 
 for item in "$web_path"/*; do
     declare item_name=\$(basename "\$item")
-    if [[ "\$ignore" =~ "\item_name" ]];then
+    if [[ "\$ignore" =~ "\$item_name" ]];then
           continue
     fi
     cd "\$item" || exit
