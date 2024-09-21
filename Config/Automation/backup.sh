@@ -22,12 +22,11 @@ fi
 for item in "$web_path"/* ; do
     [[ $ignore -eq 1 ]] && echo "当前脚本会备份的目录如下"
     declare item_name=$(basename "$item")
-    echo "${ignore}.${item_name}"
-    ignore=[[$ignore+1]]
+    echo "${item_name}"
 done
 
 echo "请输入需要屏蔽的目录用逗号隔开"
-read -p "请输入" ignore
+read -p "请输入：" ignore
 
 
 read -p "是否备份到本地，默认 关闭 ，输入 y 开启：" local_pick
