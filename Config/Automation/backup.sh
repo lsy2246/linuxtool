@@ -97,7 +97,7 @@ for item in "$web_path"/*; do
     tar -czf "\${item_name}_\${date_time}.tar.gz" \$(ls)
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
     ${path}/aliyunpan/aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
-    cp "\${item_name}_\${date_time}.tar.gz" "${local_pick}/\${year}/"
+    mkdir -p "\${item_name}" && cp "\${item_name}_\${date_time}.tar.gz" "${local_pick}/\${year}/\${item_name}"
     rm "\${item_name}_\${date_time}.tar.gz"
 done
 EOF
@@ -111,7 +111,7 @@ sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 if [[ $local_pick == [Yy] ]];then
   echo "本地备份路径：${web_path}/年份/目录名称"
 else
-  sed -i '/cp.*/d' "${path}/backup.sh"
+  sed -i '/mkdir.*/d' "${path}/backup.sh"
 fi
 
 if [[ $baidu_pick == [Nn] ]];then
