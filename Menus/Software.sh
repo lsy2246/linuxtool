@@ -5,11 +5,13 @@ declare version="$(cat /etc/os-release | grep "^ID" | awk -F '=' '{print $2}')"
 
 declare pkg
 if [[ -f "/usr/bin/apt-get" ]];then
-  pkg='apt-get install -y'
+  pkg='apt-get'
+  install_str+="${pkg} install -y"
   sudo apt-get update -y
   sudo apt-get dist-upgrade -y
 elif [[ -f "/usr/bin/apt" ]];then
-  pkg='apt install -y'
+  pkg='apt'
+  install_str+="${pkg} install -y"
   sudo apt update -y
   sudo apt dist-upgrade -y
 else
@@ -81,15 +83,15 @@ if [[ ! $pick_x =~ [Nn] ]];then
 fi
 
 
-eval "sudo ${pkg} ${install_str}"
+eval "sudo ${install_str}"
 if [[ ! $pick_x =~ [Nn] ]];then
     eval "$(curl https://get.x-cmd.com)"
 fi
 
 if [[ ! $pick_docker =~ [Nn] ]];then
-    if [[ ${pkg} =~ '^apt.*' ]];then
-        sudo apt get update
-        sudo apt ca-certificates curl autoremove -y
+    if [[ ${pkg} =~ '^apt' || ${pkg} =~ '^apt-get' ]];then
+        sudo ${pkg} update
+        sudo ${pkg} install ca-certificates curl -y
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL "${docker_img}/linux/${version}/gpg" -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -97,8 +99,8 @@ if [[ ! $pick_docker =~ [Nn] ]];then
           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] ${docker_img}/linux/${version} \
           $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        sudo apt update
-        sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+        sudo ${pkg} update
+        sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     fi
 fi
 
