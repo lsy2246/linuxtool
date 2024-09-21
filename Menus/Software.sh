@@ -87,9 +87,9 @@ if [[ ! $pick_x =~ [Nn] ]];then
 fi
 
 if [[ ! $pick_docker =~ [Nn] ]];then
-    if [[ ${pkg} =~ '^apt' || ${pkg} =~ '^apt-get' ]];then
-        sudo ${pkg} update
-        sudo ${pkg} install ca-certificates curl -y
+    if [[ ${pkg} =~ '^apt.*' ]];then
+        sudo apt get update
+        sudo apt ca-certificates curl autoremove -y
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL "${docker_img}/linux/${version}/gpg" -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -97,8 +97,8 @@ if [[ ! $pick_docker =~ [Nn] ]];then
           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] ${docker_img}/linux/${version} \
           $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        sudo ${pkg} update
-        sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+        sudo apt update
+        sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     fi
 fi
 
