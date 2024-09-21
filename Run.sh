@@ -25,7 +25,7 @@ echo "======Linux工具箱======"
 read -p "请输入要使用的功能：" pick
 if [[ "${pick}" -gt 0 && "${pick}" -le "${#pick_array[*]}" ]];then
     clear
-    bash "${path_script}/Menus/${pick_array[$pick]}.sh ${path_script}"
+    bash "${path_script}/Menus/${pick_array[$pick]}.sh" "$path_script"
 else
     exit
 fi
