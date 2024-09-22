@@ -1,4 +1,5 @@
 declare pick
+declare path_script=$1
 echo "========Other========"
 echo "1.开启BBR"
 echo "2.更换系统语言"

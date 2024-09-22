@@ -1,25 +1,30 @@
 #!/bin/bash
 
-declare mail
-declare domain
-declare domain_str=''
-read -p "请输入用来申请域名的邮箱：" mail
-if [[ $mail =~ "\w+@\w+\.[a-z]+" ]];then
-      echo "邮箱不合法"
-      exit
-    fi
+if [[ ! -d "${HOME}/.acme.sh" ]];then
+  declare mail
+  declare domain
+  read -p "请输入用来申请域名的邮箱：" mail
+  if [[ $mail =~ "\w+@\w+\.[a-z]+" ]];then
+        echo "邮箱不合法"
+        exit
+      fi
 
-echo "请输入需要申请SSL证书的域名"
-while(1);do
-  read -p "不输入退出添加：" domain
-  if [[ -z $domain ]];then
-    break
-  elif [[ $domain =~ "\w+\.[a-z]+" ]];then
-    echo "域名不合法"
-    exit
-  domain_str="$domain_str -d $domain"
-  fi
-done
+  echo "请输入需要申请SSL证书的域名"
+  while(1);do
+    read -p "不输入退出添加：" domain
+    if [[ -z $domain ]];then
+      break
+    elif [[ $domain =~ "\w+\.[a-z]+" ]];then
+      echo "域名不合法"
+      exit
+    domain_str="$domain_str -d $domain"
+    fi
+  done
+
+  curl https://get.acme.sh | sh -s "email=$mail"
+fi
+
+declare domain_str=''
 if [[ -z $domain_str ]]; then
     echo "需要添加的域名不能为空"
     exit
@@ -29,10 +34,6 @@ declare pick_mode
 read "1.http验证"
 read "2.dns验证"
 read -p "请选择验证模式" pick_mode
-
-if [[ ! -d "${HOME}/.acme.sh" ]];then
-  curl https://get.acme.sh | sh -s "email=$mail"
-fi
 
 case $pick_mode in
 '1')
@@ -60,6 +61,7 @@ case $pick_mode in
 
   case ${mode_arr[$pick_mode]} in
   'TXT记录')
+      declare domain
       declare $log_output=$(acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
       declare domain=$( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}')
       declare txt_value=$(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}')
