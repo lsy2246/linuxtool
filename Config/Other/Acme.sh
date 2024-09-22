@@ -18,10 +18,11 @@ while(true);do
   read -p "不输入退出添加：" domain
   if [[ -z $domain ]];then
     break
-  elif [[ ! $domain =~ "[\w+\.]+" ]];then
+  elif [[ ! $domain =~ [\w+\.]+ ]];then
     echo "域名不合法"
     exit
-  domain_str="$domain_str -d $domain"
+  else
+    domain_str="$domain_str -d $domain"
   fi
 done
 if [[ -z $domain_str ]]; then
@@ -30,8 +31,8 @@ if [[ -z $domain_str ]]; then
 fi
 
 declare pick_mode
-read "1.http验证"
-read "2.dns验证"
+echo "1.http验证"
+echo "2.dns验证"
 read -p "请选择验证模式" pick_mode
 
 case $pick_mode in
