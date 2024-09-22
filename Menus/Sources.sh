@@ -1,6 +1,8 @@
 #!/bin/bash
 
 declare version=$(cat /etc/os-release | grep VERSION_CODENAME | awk -F '=' '{print $2}')
+declare system=$(cat /etc/os-release | grep "^ID" | awk -F '=' '{print $2}')
+declare status=0
 
 declare -A sources_dick
 sources_dick['中国科技技术大学(默认)']='http://mirrors.ustc.edu.cn'
@@ -31,8 +33,6 @@ else
         exit
 fi
 
-
-
 case "$version" in
     'bookworm')
         cat > "/etc/apt/sources.list" << EOF
@@ -42,10 +42,25 @@ deb ${url}/debian/ bookworm-backports main contrib non-free non-free-firmware
 EOF
         sudo apt update -y
         sudo apt-get update -y
+        status=1
     ;;
-    *)
-        echo "暂不支持该系统一键换源"
-        exit
 esac
+
+case "$system" in
+    'arch')
+        sudo pacman -Sy pacman-key  --noconfirm
+        sed -i '/^Server.*/d' "/etc/pacman.conf"
+        echo "Server = ${url}/archlinuxcn/\$arch"
+        sudo pacman-key --lsign-key "farseerfc@archlinux.org"
+        status=1
+    ;;
+esac
+
+
+if [[ $status == 0 ]]; then
+    echo "暂不支持该系统一键换源"
+    exit
+fi
+
 
 echo "换源成功"
