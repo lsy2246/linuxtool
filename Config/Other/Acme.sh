@@ -62,7 +62,7 @@ case $pick_mode in
   case ${mode_arr[$pick_mode]} in
   'TXT记录')
       declare domain
-      declare log_output=$(acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
+      declare log_output=$(${HOME}/.acme.sh/acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
       declare domain=$( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}')
       declare txt_value=$(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}')
       echo "请到dns系统解析TXT记录"
