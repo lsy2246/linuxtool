@@ -2,6 +2,7 @@
 
 declare install_str
 declare version="$(cat /etc/os-release | grep "^ID" | awk -F '=' '{print $2}')"
+declare status=0
 
 declare pkg
 if [[ -f "/usr/bin/apt-get" ]];then
@@ -12,6 +13,10 @@ elif [[ -f "/usr/bin/apt" ]];then
   pkg='apt'
   install_str+="${pkg} install -y"
   sudo apt update -y
+elif [[ -f "/usr/bin/pacman" ]];then
+  pkg='pacman'
+  install_str+="${pkg} -Sy --noconfirm"
+  sudo pacman -Syu --noconfirm
 else
   echo "暂不支持该系统一键安装常用软件"
   exit
@@ -75,7 +80,6 @@ fi
 
 
 if [[ ! $pick_x =~ [Nn] ]];then
-    
     eval "$(curl https://get.x-cmd.com)"
 fi
 
@@ -98,6 +102,12 @@ if [[ ! $pick_docker =~ [Nn] ]];then
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo ${pkg} update
         sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    elif [[ ${pkg} == 'arch' ]];then
+          sudo pacman -Sy docker --noconfirm
+          sudo systemctl start docker.service
+          sudo systemctl enable docker.service
+          sudo usermod -aG docker $USER
+          newgrp docker
     fi
 fi
 
