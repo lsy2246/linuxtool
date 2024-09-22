@@ -24,11 +24,11 @@ read -p "请输入：" pick
 if [[ -z $pick ]];then
         declare url='http://mirrors.ustc.edu.cn'
 elif [[ ${pick} =~ [1-${#sources_dick[@]}] ]];then
-          echo "输入错误"
-          exit
-else
         pick=${pcik_array[$pick]}
         declare url=${sources_dick[$pick]}
+else
+        echo "输入错误"
+        exit
 fi
 
 
