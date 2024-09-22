@@ -4,7 +4,7 @@ if [[ ! -d "${HOME}/.acme.sh" ]];then
   declare mail
   declare domain
   read -p "请输入用来申请域名的邮箱：" mail
-  if [[ $mail =~ "\w+@\w+\.[a-z]+" ]];then
+  if [[ ! $mail =~ "\w+@\w+\.[a-z]+" ]];then
         echo "邮箱不合法"
         exit
       fi
@@ -14,11 +14,11 @@ fi
 
 declare domain_str=''
 echo "请输入需要申请SSL证书的域名"
-while(1);do
+while(true);do
   read -p "不输入退出添加：" domain
   if [[ -z $domain ]];then
     break
-  elif [[ $domain =~ "\w+\.[a-z]+" ]];then
+  elif [[ ! $domain =~ "[\w+\.]+" ]];then
     echo "域名不合法"
     exit
   domain_str="$domain_str -d $domain"
@@ -54,7 +54,7 @@ case $pick_mode in
       ehco "${pick}.${mode_arr[$pick]}"
   done
   read -p "请选择验证模式" pick_mode
-  if [[ $pick_mode =~ [1-${pick}] ]]; then
+  if [[ ! $pick_mode =~ [1-${pick}] ]]; then
       exit
   fi
 
@@ -79,12 +79,12 @@ case $pick_mode in
       declare CF_Key
       declare CF_Email
       read -p "请输入cloudflare的邮箱：" CF_Email
-      if [[ $CF_Email =~ "\w+@\w+\.[a-z]+" ]];then
+      if [[ ! $CF_Email =~ "\w+@\w+\.[a-z]+" ]];then
             echo "邮箱不合法"
             exit
       fi
       read -p "请输入cloudflare的密钥：" CF_Key
-      if [[ $CF_Key =~ "\w+" ]];then
+      if [[ ! $CF_Key =~ "\w+" ]];then
             echo "密钥不合法"
             exit
       fi
