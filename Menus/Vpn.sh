@@ -16,7 +16,7 @@ for i in "${!vpn_array[@]}";do
 done
 read -p "请输入要选择的序号：" vpn_pick
 
-if [[ $vpn_pick =~ [1-$vpn_number] ]];then
+if [[ $vpn_pick =~ [1-${#vpn_array[@]}] ]];then
   eval "${vpn_array[${vpn_index[$vpn_pick]}]}"
   echo "安装完成"
 else

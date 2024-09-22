@@ -23,7 +23,7 @@ read -p "请输入：" pick
 
 if [[ -z $pick ]];then
         declare url='http://mirrors.ustc.edu.cn'
-elif [[ ${pick} -le 0 || ${pick} -gt  ${#sources_dick[*]} ]];then
+elif [[ ${pick} =~ [1-${#sources_dick[@]}] ]];then
           echo "输入错误"
           exit
 else
