@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if [[ ! -d "${HOME}/.acme.sh" ]];then
+if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
+  rm -rf ${HOME}/.acme.sh
   declare mail
   declare domain
   read -p "请输入用来申请域名的邮箱：" mail
