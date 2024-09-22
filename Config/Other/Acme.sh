@@ -67,8 +67,10 @@ case $pick_mode in
       declare domain=$( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}')
       declare txt_value=$(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}')
       echo "请到dns系统解析TXT记录"
-      echo "域名: $domain"
-      echo "文本记录: $txt_value"
+      echo "名称: "
+      echo $domain
+      echo "文本记录:"
+      echo $txt_value
       read -p "解析完成请输入 y：" pick
       if [[ $pick =~ [Yy] ]]; then
           eval "${HOME}/.acme.sh/acme.sh --renew $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please"
@@ -86,10 +88,6 @@ case $pick_mode in
             exit
       fi
       read -p "请输入cloudflare的密钥：" CF_Key
-      if [[ ! $CF_Key =~ \w+ ]];then
-            echo "密钥不合法"
-            exit
-      fi
       export CF_Key=$CF_Key
       export CF_Email=$CF_Email
       eval "${HOME}/.acme.sh/acme.sh --issue $domain_str --dns dns_cf"
