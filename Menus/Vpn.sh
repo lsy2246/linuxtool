@@ -2,7 +2,7 @@
 declare vpn_number=0
 declare -a vpn_index
 declare -A vpn_array
-declarec vpn_pick
+declare vpn_pick
 
 vpn_array["v2ray"]='bash <(curl -s -L https://git.io/v2ray.sh)'
 vpn_array["v2ray-agent"]='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh'
