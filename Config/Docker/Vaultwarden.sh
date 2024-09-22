@@ -25,7 +25,7 @@ services:
 EOF
 
 if [[ -z $password ]];then
-	awk '!/ADMIN_TOKEN=/' docker-compose.yml > tmpfile && mv tmpfile docker-compose.yml
+	sed -i '/.*ADMIN_TOKEN=.*/d' "docker-compose.yml"
 fi
 
 mkdir templates
@@ -36,8 +36,8 @@ rm main.zip
 cd vaultwarden-lang-zhcn-main 
 declare admin=$( ls | grep "admin" | tac | head -n 1 )
 declare email=$( ls | grep "email" | tac | head -n 1 )
-mv "$admin" admin && cp -r admin ..
-mv "$email" email && cp -r email ..
+mv "$admin" "../admin"
+mv "$email" "../email"
 cd ..
 rm -rf vaultwarden-lang-zhcn-main
 sudo docker compose up -d || echo "安装失败" && exit
