@@ -13,6 +13,6 @@ SUBNET_PREFIX=172.22.222
 IMAGE_PREFIX=swr.cn-east-3.myhuaweicloud.com/chaitin-safeline
 EOF
 sudo docker compose up -d || "安装失败" $$ exit
-declare password=$( docker exec safeline-mgt resetadmin | grep password | awk -F "：" '{print $2}' )
+declare password=$( docker exec safeline-mgt resetadmin &> /dev/null | grep password | awk -F "：" '{print $2}' )
 echo "账号：admin"
 echo "密码：${password}"
