@@ -1,5 +1,5 @@
 #!/bin/bash
-declare vpn_number=1
+declare vpn_number=0
 declare -a vpn_index
 declare -A vpn_array
 declarec vpn_pick
@@ -10,16 +10,16 @@ vpn_array["x-ui"]='bash <(curl -Ls https://raw.githubusercontent.com/FranzKafkaY
 vpn_array["V2bX"]='wget -N https://raw.githubusercontent.com/wyx2685/V2bX-script/master/install.sh && bash install.sh'
 
 for i in "${!vpn_array[@]}";do
+  vpn_number=$((vpn_number+1))
   vpn_index[${vpn_number}]=${i}
   echo "${vpn_number}.${i}"
-  vpn_number=$((vpn_number+1))
 done
 read -p "请输入要选择的序号：" vpn_pick
 
-if [[ -z ${vpn_array[${vpn_index[$vpn_pick]}]} ]];then
-  echo "输入错误"
-else
+if [[ $vpn_pick -gt 0 && $vpn_pick -lt $vpn_number   ]];then
   eval "${vpn_array[${vpn_index[$vpn_pick]}]}"
   echo "安装完成"
+else
+  echo "输入错误"
 fi
 
