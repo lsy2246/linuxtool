@@ -5,7 +5,7 @@ if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
   declare mail
   declare domain
   read -p "请输入用来申请域名的邮箱：" mail
-  if [[ ! $mail =~ \w+@[\w+\.]+ ]];then
+  if [[ ! $mail =~ .*@.* ]];then
         echo "邮箱不合法"
         exit
       fi
@@ -81,7 +81,7 @@ case $pick_mode in
       declare CF_Key
       declare CF_Email
       read -p "请输入cloudflare的邮箱：" CF_Email
-      if [[ ! $CF_Email =~ \w+@[\w+\.]+ ]];then
+      if [[ ! $CF_Email =~ .*@.* ]];then
             echo "邮箱不合法"
             exit
       fi
