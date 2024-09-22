@@ -44,6 +44,16 @@ EOF
         sudo apt-get update -y
         status=1
     ;;
+      'bullseye')
+              cat > "/etc/apt/sources.list" << EOF
+deb ${url}/debian/ bullseye main contrib non-free
+deb ${url}/debian/ bullseye-updates main contrib non-free
+deb ${url}/debian/ bullseye-backports main contrib non-free
+EOF
+              sudo apt update -y
+              sudo apt-get update -y
+              status=1
+          ;;
 esac
 
 case "$system" in
@@ -52,6 +62,18 @@ case "$system" in
         sed -i '/^Server.*/d' "/etc/pacman.conf"
         echo "Server = ${url}/archlinuxcn/\$arch"
         sudo pacman-key --lsign-key "farseerfc@archlinux.org"
+        pacman -Syyu
+        status=1
+    ;;
+  'ubuntu')
+        cat > "/etc/apt/sources.list" << EOF
+deb ${url}/ubuntu/ ${version} main restricted universe multiverse
+deb ${url}/ubuntu/ ${version}-security main restricted universe multiverse
+deb ${url}/ubuntu/ ${version}-updates main restricted universe multiverse
+deb ${url}/ubuntu/ ${version}-backports main restricted universe multiverse
+EOF
+        sudo apt update -y
+        sudo apt-get update -y
         status=1
     ;;
 esac
