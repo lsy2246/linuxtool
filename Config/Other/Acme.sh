@@ -33,7 +33,7 @@ fi
 declare pick_mode
 echo "1.http验证"
 echo "2.dns验证"
-read -p "请选择验证模式" pick_mode
+read -p "请选择验证模式：" pick_mode
 
 case $pick_mode in
 '1')
@@ -50,11 +50,11 @@ case $pick_mode in
   declare -a mode_arr
   mode_arr[1]="TXT记录"
   mode_arr[2]='cloudflare'
-  for i in $mode_arr ; do
-      pick=$(( pick+1 ))
-      ehco "${pick}.${mode_arr[$pick]}"
+  for i in "${!mode_arr[@]}"; do
+      ((pick++))
+      echo "${pick}. ${mode_arr[$i]}"
   done
-  read -p "请选择验证模式" pick_mode
+  read -p "请选择验证模式：" pick_mode
   if [[ ! $pick_mode =~ [1-${pick}] ]]; then
       exit
   fi
