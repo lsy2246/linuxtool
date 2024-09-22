@@ -9,22 +9,21 @@ if [[ ! -d "${HOME}/.acme.sh" ]];then
         exit
       fi
 
-  echo "请输入需要申请SSL证书的域名"
-  while(1);do
-    read -p "不输入退出添加：" domain
-    if [[ -z $domain ]];then
-      break
-    elif [[ $domain =~ "\w+\.[a-z]+" ]];then
-      echo "域名不合法"
-      exit
-    domain_str="$domain_str -d $domain"
-    fi
-  done
-
   curl https://get.acme.sh | sh -s "email=$mail"
 fi
 
 declare domain_str=''
+echo "请输入需要申请SSL证书的域名"
+while(1);do
+  read -p "不输入退出添加：" domain
+  if [[ -z $domain ]];then
+    break
+  elif [[ $domain =~ "\w+\.[a-z]+" ]];then
+    echo "域名不合法"
+    exit
+  domain_str="$domain_str -d $domain"
+  fi
+done
 if [[ -z $domain_str ]]; then
     echo "需要添加的域名不能为空"
     exit
