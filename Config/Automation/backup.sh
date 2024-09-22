@@ -87,8 +87,8 @@ cat > "${path}/backup.sh" << EOF
 #!/bin/bash
 declare date_time=\$(date +"%Y_%m_%d") # 日期格式
 declare year=\$(date +"%Y") #年份
-declare ignore=$ignore
-source \"${path}/venv/bin/activate\"
+declare ignore="$ignore"
+source "${path}/venv/bin/activate"
 
 for item in "$web_path"/*; do
     declare item_name=\$(basename "\$item")
