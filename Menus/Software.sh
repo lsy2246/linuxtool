@@ -8,12 +8,10 @@ if [[ -f "/usr/bin/apt-get" ]];then
   pkg='apt-get'
   install_str+="${pkg} install -y"
   sudo apt-get update -y
-  sudo apt-get dist-upgrade -y
 elif [[ -f "/usr/bin/apt" ]];then
   pkg='apt'
   install_str+="${pkg} install -y"
   sudo apt update -y
-  sudo apt dist-upgrade -y
 else
   echo "暂不支持该系统一键安装常用软件"
   exit
