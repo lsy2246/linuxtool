@@ -3,15 +3,18 @@
 declare path_script=$1
 declare pick
 echo "========Automation========"
-echo "1.自动备份"
-echo "2.自动更新软件"
-echo "3.自动Docker compose应用"
-echo "4.自动更新ssh证书"
+declare print_number=0
+declare -a print_array
+for i in "${path_script}/Config/Automation"/*;do
+    print_number=$((print_number + 1))
+    print_array[$print_number]=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
+    echo "${print_number}.${print_array[$print_number]}"
+done
 echo "输入其他任意返回主页"
 echo "========Automation========"
 read -p "请输入：" pick
 
-if [[ ${pick} -lt 1 || ${pick} -gt 4 ]];then
+if [[ ! ${pick} =~ [1-$print_number] ]];then
   exit
 fi
 
@@ -46,44 +49,13 @@ if [[ "$cron" == '* * * * * ' ]];then
    exit
 fi
 
+bash "${path_script}/Config/Automation/${print_array[pick]}.sh" "$path"
 
-case $pick in
-    '1')
-      bash "${path_script}/Config/Automation/backup.sh" "$path" "$cron"
-      ;;
-      '2')
-      bash "${path_script}/Config/Automation/update.sh" "$path" "$cron"
-      ;;
-      '3')
-      if ! command -v docker &> /dev/null; then
-          echo "docker未安装"
-          exit
-      fi
-      if [[ -f "${path}/up-docker_compose.sh" ]];then
-        echo "该路径文件已经存在"
-      fi
-      declare web_path
-      read -p "请输入数据目录,默认 /var/www ：" web_path
-      if [[ -z ${web_path} ]];then
-        web_path='/var/www'
-      fi
-      cat > "${path}/up-docker_compose.sh" << EOF
-#!/bin/bash
-for dir in "${web_path}"/*/; do
-        cd "\$dir" || exit
-        sudo docker compose pull
-        sudo docker compose up -d
-done
-EOF
-      chmod +x "${path}/up-docker_compose.sh"
+chmod +x "${path}/${print_array[pick]}"
+declare cron_job="${cron} ${path}/${print_array[pick]}"
+(crontab -l 2>/dev/null | grep -v "${print_array[pick]}") | sudo crontab -
+(crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
 
-      declare cron_job="${cron} ${path}/up-docker_compose.sh"
-      (crontab -l 2>/dev/null | grep -v "up-docker_compose.sh") | sudo crontab -
-      (crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
+sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 
-      sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
-      ;;
-    '4')
-      echo "糟糕忘写了"
-esac
 echo "配置完成"

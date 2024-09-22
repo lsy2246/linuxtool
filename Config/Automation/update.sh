@@ -1,5 +1,4 @@
 declare path="$1"
-declare cron="$2"
 
 if [[ -f "${path}/update.sh" ]];then
   echo "该路径文件已经存在"
@@ -20,11 +19,3 @@ else
   echo "暂不支持该系统配置自动更新软件"
   exit
 fi
-
-chmod +x "${path}/update.sh"
-
-declare cron_job="${cron} ${path}/update.sh"
-(crontab -l 2>/dev/null | grep -v "update.sh") | sudo crontab -
-(crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
-
-sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"

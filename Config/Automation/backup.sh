@@ -1,12 +1,10 @@
 #!/bin/bash
 
 declare path="$1"
-declare cron="$2"
 declare web_path
 declare local_pick
 declare baidu_pick
 declare aliyun_pick
-declare cron
 declare ignore=1
 
 
@@ -103,12 +101,6 @@ for item in "$web_path"/*; do
     rm "\${item_name}_\${date_time}.tar.gz"
 done
 EOF
-chmod +x "$path/backup.sh"
-
-declare cron_job="${cron} ${path}/backup.sh"
-(crontab -l 2>/dev/null | grep -v "backup.sh") | sudo crontab -
-
-sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 
 if [[ $local_pick == [Yy] ]];then
   echo "本地备份路径：${web_path}/年份/目录名称"
