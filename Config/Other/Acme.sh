@@ -4,7 +4,7 @@ if [[ ! -d "${HOME}/.acme.sh" ]];then
   declare mail
   declare domain
   read -p "请输入用来申请域名的邮箱：" mail
-  if [[ ! $mail =~ "\w+@\w+\.[a-z]+" ]];then
+  if [[ ! $mail =~ \w+@\w+\.[a-z]+ ]];then
         echo "邮箱不合法"
         exit
       fi
@@ -61,7 +61,7 @@ case $pick_mode in
   case ${mode_arr[$pick_mode]} in
   'TXT记录')
       declare domain
-      declare $log_output=$(acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
+      declare log_output=$(acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
       declare domain=$( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}')
       declare txt_value=$(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}')
       echo "请到dns系统解析TXT记录"
@@ -79,12 +79,12 @@ case $pick_mode in
       declare CF_Key
       declare CF_Email
       read -p "请输入cloudflare的邮箱：" CF_Email
-      if [[ ! $CF_Email =~ "\w+@\w+\.[a-z]+" ]];then
+      if [[ ! $CF_Email =~ \w+@\w+\.[a-z]+ ]];then
             echo "邮箱不合法"
             exit
       fi
       read -p "请输入cloudflare的密钥：" CF_Key
-      if [[ ! $CF_Key =~ "\w+" ]];then
+      if [[ ! $CF_Key =~ \w+ ]];then
             echo "密钥不合法"
             exit
       fi
