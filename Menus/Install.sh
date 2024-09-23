@@ -22,8 +22,12 @@ chmod +x "$path/linuxtool/Run.sh" &> /dev/null
 
 sed -i '/alias tool.*/d' "${HOME}/.bashrc"
 echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.bashrc"
-
 source "${HOME}/.bashrc"
+
+sed -i '/alias tool.*/d' "${HOME}/.profile"
+echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.profile"
+source "${HOME}/.profile"
+
 export tool="$path/linuxtool/Run.sh"
 
 echo "工具箱已经安装成功"
