@@ -47,7 +47,6 @@ done
 echo "请输入需要安装的软件序号（默认安装全部）"
 read -p "用 空格 隔开：" pick
 
-
 if [[ -z $pick ]];then
   for (( i = 1; i <= ${#soft_dick[@]}; i++ )); do
       if [[ $i != 1 ]]; then
@@ -56,13 +55,9 @@ if [[ -z $pick ]];then
           pick="$i"
       fi
   done
-else
-  for i in $pick ; do
-      if [[ ! $i =~ [1-$soft_number] ]]; then
-          echo "输入错误"
-          exit
-      fi
-  done
+elif ! [[ $pick =~ [1-${#soft_dick[@]}] || $pick =~ ([1-${#soft_dick[@]}][\s]?)+ ]];then
+  echo "输入错误"
+  exit
 fi
 
 for i in $pick ; do
