@@ -51,9 +51,10 @@ else
   url='https://github.com/lsy2246/linuxtool.git'
 fi
 
+echo "正在下载脚本中"
 git clone "$url" "$path/linuxtool" &> /dev/null
 
-if [[ -d "${path}/linuxtool" ]];then
+if ! [[ -d "${path}/linuxtool" ]];then
   echo "脚本下载失败"
   exit
 fi
