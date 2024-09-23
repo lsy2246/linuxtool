@@ -58,7 +58,7 @@ if [[ -z $pick ]];then
   done
 else
   for i in $pick ; do
-      if [[ ! $i =~ [1-${#soft_dick[@]}] ]]; then
+      if [[ ! $i =~ [1-$soft_number] ]]; then
           echo "输入错误"
           exit
       fi
