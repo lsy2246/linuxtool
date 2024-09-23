@@ -28,7 +28,7 @@ done
 read -p "请选择需要安装的镜像序号：" pick
 
 if [[ $pick =~ [1-"${#imags_dick[@]}"\ ] ]];then
-  declare img=${imags_dick[${imags_arr[$pick]}]}
+  declare img=${imags_arr[$pick]}
   declare version=''
   declare -a version_arr
   declare version_number=0
