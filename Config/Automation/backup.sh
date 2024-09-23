@@ -105,18 +105,18 @@ EOF
 if [[ $local_pick == [Yy] ]];then
   echo "本地备份路径：${web_path}/年份/目录名称"
 else
-  sed -i /mkdir.*/d "${path}/backup.sh"
+  sed -i '/mkdir.*/d' "${path}/backup.sh"
 fi
 
 if [[ $baidu_pick == [Nn] ]];then
-  sed -i /bypy.*/d "${path}/backup.sh"
-  sed -i /source.*/d "${path}/backup.sh"
+  sed -i '/bypy.*/d' "${path}/backup.sh"
+  sed -i '/source.*/d' "${path}/backup.sh"
 else
   echo "百度网盘备份路径：我的应用数据/bypy/目录名称"
 fi
 
 if [[ $baidu_pick == [Nn] ]];then
-  sed -i /.*aliyunpan.*/d "/var/script/backup.sh"
+  sed -i '/.*aliyunpan.*/d' "/var/script/backup.sh"
 else
   echo "阿里云盘备份路径：网盘/目录名称/日期"
 fi

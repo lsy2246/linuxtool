@@ -14,7 +14,7 @@ tar -zxf "$path/aa" -C $path
 rm "$path/aa"
 chmod +x "$path/linuxtool/Run.sh"
 
-sed -i /alias tool.*/d "${HOME}/.bashrc"
+sed -i '/alias tool.*/d' "${HOME}/.bashrc"
 echo "alias tool=$path/linuxtool/Run.sh" | cat >> "${HOME}/.bashrc"
 
 source "${HOME}/.bashrc"
