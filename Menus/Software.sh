@@ -56,9 +56,13 @@ if [[ -z $pick ]];then
           pick="$i"
       fi
   done
-elif ! [[ $pick =~ [1-${#soft_dick[@]}\s]+ ]];then
-  echo "输入错误"
-  exit
+else
+  for i in $pick ; do
+      if [[ $i =~ [1-${#soft_dick[@]}] ]]; then
+          echo "输入错误"
+          exit
+      fi
+  done
 fi
 
 for i in $pick ; do
