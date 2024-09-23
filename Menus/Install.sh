@@ -8,7 +8,7 @@ fi
 echo "软件正在安装中"
 
 mkdir -p "$path"
-rm -rf "$path/linuxtoo"
+rm -rf "$path/linuxtool"
 
 wget https://g.lsy22.com/lsy/LinuxTool/archive/master.tar.gz -O "${path}/aa" &> /dev/null
 
@@ -27,8 +27,6 @@ source "${HOME}/.bashrc"
 sed -i '/alias tool.*/d' "${HOME}/.profile"
 echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.profile"
 source "${HOME}/.profile"
-
-export tool="$path/linuxtool/Run.sh"
 
 echo "工具箱已经安装成功"
 echo "位置：${path}/linuxtool"
