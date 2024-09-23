@@ -49,6 +49,10 @@ if [[ "$cron" == '* * * * * ' ]];then
    exit
 fi
 
+if [[ -f "${path_script}/Config/Automation/${print_array[pick]}.sh" ]];then
+  echo "该路径文件已经存在"
+fi
+
 bash "${path_script}/Config/Automation/${print_array[pick]}.sh" "$path"
 
 chmod +x "${path}/${print_array[pick]}.sh"

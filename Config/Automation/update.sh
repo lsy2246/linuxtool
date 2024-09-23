@@ -1,9 +1,5 @@
 declare path="$1"
 
-if [[ -f "${path}/update.sh" ]];then
-  echo "该路径文件已经存在"
-fi
-
 echo '#!/bin/bash' > "${path}/update.sh"
 
 if [[ -f "/usr/bin/apt" ]];then

@@ -5,9 +5,7 @@ if ! command -v docker &> /dev/null; then
     echo "docker未安装"
     exit
 fi
-if [[ -f "${path}/up-docker_compose.sh" ]];then
-  echo "该路径文件已经存在"
-fi
+
 declare web_path
 read -p "请输入数据目录,默认 /var/www ：" web_path
 if [[ -z ${web_path} ]];then

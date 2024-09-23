@@ -8,10 +8,6 @@ declare aliyun_pick
 declare ignore=1
 
 
-if [[ -f "${path}/backup.sh" ]];then
-  echo "该路径文件已经存在"
-fi
-
 read -p "请输入数据目录,默认 /var/www ：" web_path
 if [[ -z ${web_path} ]];then
   web_path='/var/www'

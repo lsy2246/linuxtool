@@ -45,8 +45,8 @@ if [[ $pick =~ [1-"${#imags_dick[@]}"\ ] ]];then
     elif [[ $pick =~ [1-$version_number] ]];then
       version=${version_arr[$pick]}
     fi
-  echo "bash <(curl -Ls ${server}) ${img} ${version}"
   fi
+  eval "bash <(curl -Ls ${server}) ${img} ${version}"
 else
   echo "选择错误"
 fi
