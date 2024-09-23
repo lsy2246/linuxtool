@@ -62,7 +62,7 @@ fi
 
 for i in $pick ; do
     if [[ ${soft_dick[${soft_array[$i]}]} == 0 ]]; then
-        eval "$install_str ${soft_dick{${soft_array[$i]}}}}"
+        eval "$install_str ${soft_array[$i]}"
     else
       soft_dick[${soft_array[$i]}]=2
     fi
