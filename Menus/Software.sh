@@ -55,7 +55,7 @@ if [[ -z $pick ]];then
           pick="$i"
       fi
   done
-elif ! [[ $pick =~ [1-${#soft_dick[@]}] || $pick =~ ([1-${#soft_dick[@]}][\s]?)+ ]];then
+elif ! [[ $pick -ge 1 && $pick -le ${#soft_dick[@]} || $pick =~ ([1-${#soft_dick[@]}][\s]?)+ ]];then
   echo "输入错误"
   exit
 fi
