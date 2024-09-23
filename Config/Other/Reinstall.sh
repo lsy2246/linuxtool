@@ -41,9 +41,9 @@ if [[ $pick =~ [1-"${#imags_dick[@]}"\ ] ]];then
     done
     read -p "请输入：" pick
     if [ -z $pick ]; then
-      version=$version_arr[$version_number]
+      version=${version_arr[$version_number]}
     elif [[ $pick =~ [1-$version_number] ]];then
-      version=$version_arr[$pick]
+      version=${version_arr[$pick]}
     fi
   echo "bash <(curl -Ls ${server}) ${img} ${version}"
   fi
