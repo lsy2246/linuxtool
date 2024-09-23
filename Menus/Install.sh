@@ -9,7 +9,7 @@ fi
 mkdir -p "$path"
 rm -rf "$path/linuxtoo"
 
-wget https://g.lsy22.com/lsy/LinuxTool/archive/master.tar.gz -O aa -P $path
+wget https://g.lsy22.com/lsy/LinuxTool/archive/master.tar.gz -O "${path}/aa"
 tar -zxf "$path/aa" -C $path
 rm "$path/aa"
 chmod +x "$path/linuxtool/Run.sh"
