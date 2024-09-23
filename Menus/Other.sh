@@ -4,6 +4,7 @@ echo "========Other========"
 echo "1.开启BBR"
 echo "2.更换系统语言"
 echo "3.申请SSL证书"
+echo "4.一键DD/重装脚本"
 echo "输入其他任意返回主页"
 echo "========Other========"
 read -p "请输入：" pick
@@ -26,4 +27,7 @@ case "$pick" in
   '3')
       bash "${path_script}/Config/Other/Acme.sh"
     ;;
+  '4')
+      bash "${path_script}/Config/Other/Reinstall.sh"
+      ;;
 esac
