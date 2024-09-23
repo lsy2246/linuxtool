@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "正在更新系统包管理器"
 declare install_str
 declare version="$(cat /etc/os-release | grep "^ID" | awk -F '=' '{print $2}')"
 declare status=0
