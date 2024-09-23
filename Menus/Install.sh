@@ -5,6 +5,7 @@ read -p "默认 /var/script：" path
 if [[ -z $path ]];then
     path="/var/script"
 fi
+echo "软件正在安装中"
 
 mkdir -p "$path"
 rm -rf "$path/linuxtoo"

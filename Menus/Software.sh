@@ -47,7 +47,7 @@ done
 
 read -p "请输入需要安装的软件序号,用 空格 隔开：" pick
 
-if [[ ! $pick =~ [1-"${#soft_dick[@]}"] ]];then
+if [[ ! $pick =~ [1-"${#soft_dick[@]}"\ ] ]];then
   echo "输入错误"
   exit
 fi
