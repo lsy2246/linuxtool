@@ -6,6 +6,7 @@ if [[ -z $path ]];then
     path="/var/script"
 fi
 
+mkdir -p "$path"
 rm -rf "$path/linuxtoo"
 
 wget https://g.lsy22.com/lsy/LinuxTool/archive/master.tar.gz -O aa -P $path
