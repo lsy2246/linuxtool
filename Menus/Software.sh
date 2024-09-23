@@ -24,35 +24,47 @@ fi
 
 
 declare pick
+declare soft_number
+declare -A soft_dick
 declare -a soft_array
-soft_array[0]='git'
-soft_array[1]='vim'
-soft_array[2]='wget'
-soft_array[3]='curl'
-soft_array[4]='ssh'
-soft_array[5]='zsh'
-soft_array[6]='zip'
+soft_dick['git']=0
+soft_dick['vim']=0
+soft_dick['wget']=0
+soft_dick['curl']=0
+soft_dick['ssh']=0
+soft_dick['zsh']=0
+soft_dick['Beautify-zsh']=1
+soft_dick['docker']=1
+soft_dick['x-cmd']=1
+
 
 echo "======一键安装常用软件======"
-for i in "${soft_array[@]}"
-do
-    read -p "是否安装${i},输入 n 取消安装：" pick
-    if [[ ! $pick =~ [Nn] ]];then
-        install_str+=" ${i}"
+for i in "${!soft_dick[@]}" ; do
+    soft_number=$(( soft_number+1 ))
+    soft_array[$soft_number]=$i
+    echo "${soft_number}.${i}"
+done
+
+read -p "请输入需要安装的软件序号,用 空格 隔开：" pick
+
+if [[ ! $pick =~ [a-zA-Z\ ]+ ]];then
+  echo "输入错误"
+  exit
+fi
+
+for i in $pick ; do
+    if [[ ${soft_dick[${soft_array[$i]}]} == 0 ]]; then
+        eval "$install_str $i"
+    else
+      soft_dick[${soft_array[$i]}]=2
     fi
 done
 
+if [[ ${soft_dick['x-cmd']} == 2 ]];then
+    eval "$(curl https://get.x-cmd.com)"
+fi
 
-declare pick_x
-read -p "是否安装x-cmd,输入 n 取消安装：" pick_x
-
-declare pick_zsh
-read -p "是否一键美化zsh,输入 n 取消：" pick_zsh
-
-declare pick_docker
-read -p "是否安装docker,输入 n 取消：" pick_docker
-
-if [[ ! $pick_docker =~ [Nn] ]];then
+if [[ ${soft_dick['docker']} == 2 ]];then
     declare -A docker_imgs
     docker_imgs['官方']='https://download.docker.com'
     docker_imgs['中国科技大学(默认)']='https://mirrors.ustc.edu.cn/docker-ce'
@@ -76,20 +88,7 @@ if [[ ! $pick_docker =~ [Nn] ]];then
         docker_img_number_pick=${docker_img_number[$docker_img_number_pick]}
         docker_img=${docker_imgs[$docker_img_number_pick]}
     fi
-fi
 
-
-if [[ ! $pick_x =~ [Nn] ]];then
-    eval "$(curl https://get.x-cmd.com)"
-fi
-
-
-eval "sudo ${install_str}"
-if [[ ! $pick_x =~ [Nn] ]];then
-    eval "$(curl https://get.x-cmd.com)"
-fi
-
-if [[ ! $pick_docker =~ [Nn] ]];then
     if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then
         sudo ${pkg} update
         sudo ${pkg} install ca-certificates curl -y
@@ -102,16 +101,17 @@ if [[ ! $pick_docker =~ [Nn] ]];then
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo ${pkg} update
         sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-    elif [[ ${pkg} == 'arch' ]];then
-          sudo pacman -Sy docker --noconfirm
-          sudo systemctl start docker.service
-          sudo systemctl enable docker.service
-          sudo usermod -aG docker $USER
-          newgrp docker
+    elif [[ ${pkg} == 'pacman' ]];then
+        sudo pacman -Sy docker --noconfirm
+        sudo systemctl start docker.service
+        sudo systemctl enable docker.service
+        sudo usermod -aG docker $USER
+        newgrp docker
     fi
 fi
 
-if [[ ! $pick_zsh =~ [Nn] ]];then
+
+if [[ ${soft_dick['Beautify-zsh']} == 2 ]];then
     curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sed 's/read -r opt//g'| sed 's/exec zsh -l//g'| sh
     while [[ ! -d "$HOME/.oh-my-zsh" ]]; do
         sleep 3
