@@ -1,5 +1,5 @@
 declare path_script=$1
-declare file_name=$(basename $0)
+declare file_name=$(basename $0 .sh)
 echo "========Other========"
 declare print_number=0
 declare -a print_arr
