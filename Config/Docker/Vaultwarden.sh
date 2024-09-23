@@ -40,5 +40,5 @@ mv "$admin" "../admin"
 mv "$email" "../email"
 cd ..
 rm -rf vaultwarden-lang-zhcn-main
-sudo docker compose up -d || echo "安装失败" && exit
+docker compose up -d || echo "安装失败" && exit
 echo "需要反向代理,使用https,才能正常使用"

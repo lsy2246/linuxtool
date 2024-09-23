@@ -8,7 +8,7 @@ if [[ -z $password ]];then
 	password="Siyuan"
 fi
 
-sudo chown -R 1000:1000 $path
+chown -R 1000:1000 $path
 cd $path
 cat > "docker-compose.yml" << EOF
 version: "3.9"
@@ -27,5 +27,5 @@ services:
       - "--lang=zh_CN"
       - "--accessAuthCode=$password"
 EOF
-sudo docker compose up -d || "安装失败" $$ exit
+docker compose up -d || "安装失败" $$ exit
 echo "访问密码：$password"

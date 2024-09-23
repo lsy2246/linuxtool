@@ -31,6 +31,7 @@ soft_dick['git']=0
 soft_dick['vim']=0
 soft_dick['wget']=0
 soft_dick['curl']=0
+soft_dick['sudo']=0
 soft_dick['ssh']=0
 soft_dick['zsh']=0
 soft_dick['Beautify-zsh']=1
@@ -48,7 +49,13 @@ done
 read -p "请输入需要安装的软件序号,用 空格 隔开：" pick
 
 if [[ -z $pick ]];then
-  exit
+  for (( i = 1; i <= ${#soft_dick[@]}; i++ )); do
+      if [[ $i != 1 ]]; then
+          pick="$pick $i"
+      else
+        pick="$i"
+      fi
+  done
 elif [[ ! $pick =~ [1-"${#soft_dick[@]}"\ ] ]];then
   echo "输入错误"
   exit

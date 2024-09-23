@@ -16,6 +16,6 @@ services:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
 EOF
-sudo docker compose up -d
+docker compose up -d
 echo "Email:    admin@example.com"
 echo "Password: changeme"

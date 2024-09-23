@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! command -v sudo &> /dev/null; then
+    echo "该软件需要安装sudo才能正常安装"
+    exit
+fi
+
 declare path=$1
 declare port=$2
 
