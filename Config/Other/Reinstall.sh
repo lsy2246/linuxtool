@@ -47,6 +47,8 @@ if [[ $pick =~ [1-"${#imags_dick[@]}"\ ] ]];then
     fi
   fi
   eval "bash <(curl -Ls ${server}) ${img} ${version}"
+  echo "重启之后开始重装系统"
+  echo "用服务器厂家的VNC连接可以看到重装进度"
 else
   echo "选择错误"
 fi

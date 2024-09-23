@@ -10,7 +10,7 @@ echo "软件正在安装中"
 mkdir -p "$path"
 rm -rf "$path/linuxtool"
 
-wget https://g.lsy22.com/lsy/LinuxTool/archive/master.tar.gz -O "${path}/aa" &> /dev/null
+wget https://g.lsy22.com/lsy/linuxtool/archive/master.tar.gz -O "${path}/aa" &> /dev/null
 
 if [[ -d "${path}/aa" ]];then
   echo "脚本下载失败"
