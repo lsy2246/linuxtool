@@ -20,13 +20,23 @@ tar -zxf "$path/aa" -C $path &> /dev/null
 rm "$path/aa"
 chmod +x "$path/linuxtool/Run.sh" &> /dev/null
 
-sed -i '/alias tool.*/d' "${HOME}/.bashrc"
-echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.bashrc"
-source "${HOME}/.bashrc"
+if [[ -e "${HOME}/.bashrc" ]];then
+  sed -i '/alias tool.*/d' "${HOME}/.bashrc"
+  echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.bashrc"
+  source "${HOME}/.bashrc"
+fi
 
-sed -i '/alias tool.*/d' "${HOME}/.profile"
-echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.profile"
-source "${HOME}/.profile"
+if [[ -e "${HOME}/.profile" ]];then
+  sed -i '/alias tool.*/d' "${HOME}/.profile"
+  echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.profile"
+  source "${HOME}/.profile"
+fi
+
+if [[ -e "${HOME}/.zshrc" ]];then
+  sed -i '/alias tool.*/d' "${HOME}/.zshrc"
+  echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.zshrc"
+  source "${HOME}/.zshrc"
+fi
 
 echo "工具箱已经安装成功"
 echo "位置：${path}/linuxtool"
