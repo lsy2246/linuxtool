@@ -6,8 +6,8 @@ declare -a print_arr
 declare pick
 for i in "${path_script}/Config/${file_name}"/* ; do
   print_number=$(( print_number+1 ))
-  print_arr[$print_number]=$(basename $i)
-  echo "${print_number}.${i}"
+  print_arr[$print_number]=$(basename $i .sh)
+  echo "${print_number}.${print_arr[$print_number]}"
 done
 echo "输入其他任意返回主页"
 echo "========Other========"
