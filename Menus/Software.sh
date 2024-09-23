@@ -44,9 +44,10 @@ for i in "${!soft_dick[@]}" ; do
     soft_array[$soft_number]=$i
     echo "${soft_number}.${i}"
 done
+echo "请输入需要安装的软件序号（默认安装全部）"
+read -p "用 空格 隔开：" pick
 
-read -p "请输入需要安装的软件序号,用 空格 隔开：" pick
-
+declare i
 if [[ -z $pick ]];then
   for (( i = 1; i <= ${#soft_dick[@]}; i++ )); do
       if [[ $i != 1 ]]; then
@@ -55,7 +56,7 @@ if [[ -z $pick ]];then
           pick="$i"
       fi
   done
-elif [[ ! $pick =~ [1-"${#soft_dick[@]}"\ ] ]];then
+elif [[ ! $pick =~ [1-$i\ ] ]];then
   echo "输入错误"
   exit
 fi
