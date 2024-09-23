@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if ! command -v sudo &> /dev/null; then
-    echo "sudo未安装,部分命令无法正常运行"
+if [[ $UID != 0 ]]; then
+    echo "请以root权限执行该脚本"
+    exit
 fi
-
 
 declare -a pick_array
 declare pick_number

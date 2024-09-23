@@ -51,12 +51,12 @@ if [[ $pick == '1' ]];then
       echo "输入错误"
       exit
     fi
-    sudo echo "{\"registry-mirrors\": [\"${url}\"]}" > "/etc/docker/daemon.json"
-    sudo systemctl restart docker 2>> /dev/null|| echo "docker 重启失败"
+    echo "{\"registry-mirrors\": [\"${url}\"]}" > "/etc/docker/daemon.json"
+    systemctl restart docker 2>> /dev/null|| echo "docker 重启失败"
     echo "换源成功"
 
 elif [[ $pick == '2' ]];then
-  sudo docker system prune -af
+  docker system prune -af
   echo "清理完成"
 elif [[ "${pick}" -gt "$((${pick_number}-${#pick_array[*]}))" && "${pick}" -le "${pick_number}" ]];then
     declare file_path

@@ -8,15 +8,15 @@ declare pkg
 if [[ -f "/usr/bin/apt-get" ]];then
   pkg='apt-get'
   install_str+="${pkg} install -y"
-  sudo apt-get update -y
+  apt-get update -y
 elif [[ -f "/usr/bin/apt" ]];then
   pkg='apt'
   install_str+="${pkg} install -y"
-  sudo apt update -y
+  apt update -y
 elif [[ -f "/usr/bin/pacman" ]];then
   pkg='pacman'
   install_str+="${pkg} -Sy --noconfirm"
-  sudo pacman -Syu --noconfirm
+  pacman -Syu --noconfirm
 else
   echo "暂不支持该系统一键安装常用软件"
   exit
@@ -92,22 +92,22 @@ if [[ ${soft_dick['docker']} == 2 ]];then
     fi
 
     if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then
-        sudo ${pkg} update
-        sudo ${pkg} install ca-certificates curl -y
-        sudo install -m 0755 -d /etc/apt/keyrings
-        sudo curl -fsSL "${docker_img}/linux/${version}/gpg" -o /etc/apt/keyrings/docker.asc
-        sudo chmod a+r /etc/apt/keyrings/docker.asc
+        ${pkg} update
+        ${pkg} install ca-certificates curl -y
+        install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL "${docker_img}/linux/${version}/gpg" -o /etc/apt/keyrings/docker.asc
+        chmod a+r /etc/apt/keyrings/docker.asc
         echo \
           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] ${docker_img}/linux/${version} \
           $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        sudo ${pkg} update
-        sudo ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+          tee /etc/apt/sources.list.d/docker.list > /dev/null
+        ${pkg} update
+        ${pkg} install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     elif [[ ${pkg} == 'pacman' ]];then
-        sudo pacman -Sy docker --noconfirm
-        sudo systemctl start docker.service
-        sudo systemctl enable docker.service
-        sudo usermod -aG docker $USER
+        pacman -Sy docker --noconfirm
+        systemctl start docker.service
+        systemctl enable docker.service
+        usermod -aG docker $USER
         newgrp docker
     fi
 fi
@@ -121,8 +121,8 @@ if [[ ${soft_dick['Beautify-zsh']} == 2 ]];then
     git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    sudo sed -i 's/^#\?ZSH_THEME.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
-    sudo sed -i 's/^#\?plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions command-not-found)/g' ~/.zshrc
+    sed -i 's/^#\?ZSH_THEME.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
+    sed -i 's/^#\?plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions command-not-found)/g' ~/.zshrc
     chsh -s /bin/zsh
     exec zsh -l
 fi

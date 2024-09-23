@@ -57,9 +57,9 @@ bash "${path_script}/Config/${file_name}/${print_array[pick]}.sh" "$path"
 
 chmod +x "${path}/${print_array[pick]}.sh"
 declare cron_job="${cron} ${path}/${print_array[pick]}.sh"
-(crontab -l 2>/dev/null | grep -v "${print_array[pick]}.sh") | sudo crontab -
-(crontab -l 2>/dev/null; echo "$cron_job") | sudo crontab -
+(crontab -l 2>/dev/null | grep -v "${print_array[pick]}.sh") | crontab -
+(crontab -l 2>/dev/null; echo "$cron_job") | crontab -
 
-sudo systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
+systemctl restart cron 2>> /dev/null || echo "自动任务重启失败"
 
 echo "配置完成"
