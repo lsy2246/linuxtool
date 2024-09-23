@@ -34,10 +34,9 @@ soft_dick['curl']=0
 soft_dick['sudo']=0
 soft_dick['ssh']=0
 soft_dick['zsh']=0
-soft_dick['Beautify-zsh']=1
+soft_dick['zsh-beautify']=1
 soft_dick['docker']=1
 soft_dick['x-cmd']=1
-
 
 echo "======一键安装常用软件======"
 for i in "${!soft_dick[@]}" ; do
@@ -53,7 +52,7 @@ if [[ -z $pick ]];then
       if [[ $i != 1 ]]; then
           pick="$pick $i"
       else
-        pick="$i"
+          pick="$i"
       fi
   done
 elif [[ ! $pick =~ [1-"${#soft_dick[@]}"\ ] ]];then
@@ -63,7 +62,7 @@ fi
 
 for i in $pick ; do
     if [[ ${soft_dick[${soft_array[$i]}]} == 0 ]]; then
-        eval "$install_str $i"
+        eval "$install_str ${soft_dick{${soft_array[$i]}}}}"
     else
       soft_dick[${soft_array[$i]}]=2
     fi
@@ -120,7 +119,7 @@ if [[ ${soft_dick['docker']} == 2 ]];then
 fi
 
 
-if [[ ${soft_dick['Beautify-zsh']} == 2 ]];then
+if [[ ${soft_dick['zsh-beautify']} == 2 ]];then
     curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sed 's/read -r opt//g'| sed 's/exec zsh -l//g'| sh
     while [[ ! -d "$HOME/.oh-my-zsh" ]]; do
         sleep 3
