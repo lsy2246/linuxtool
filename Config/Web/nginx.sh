@@ -136,8 +136,8 @@ server {
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     # 日志设置
-    access_log /var/log/nginx/example.com_access.log;
-    error_log /var/log/nginx/example.com_error.log;
+    access_log /var/log/nginx/${name}_access.log;
+    error_log /var/log/nginx/${name}_error.log;
 
     # 反向代理到后台应用
     location / {
