@@ -63,10 +63,7 @@ case $pick_mode in
       mode="standalone"
     fi
     echo "请到服务器将80和443端口开启,将域名解析到本机"
-    read -p "解析完成请输入 y：" pick_start
-    if [[ ! $pick_start =~ [Yy] ]];then
-      exit
-    fi
+    read -p "解析完成请回车："
     eval "${HOME}/.acme.sh/acme.sh --issue ${domain_str} --${mode}"
   ;;
 '2')

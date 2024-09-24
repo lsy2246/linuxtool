@@ -32,7 +32,6 @@ case $pick in
   declare ssl_domain=$(echo "${domain}" | awk '{print $1}')
 
   echo "ssl证书地址"
-  read -p "请选择" pick
   echo "证书,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
   read -p "请输入证书地址：" ssl_certificate
   if [[ -z $ssl_certificate ]];then
@@ -58,7 +57,7 @@ case $pick in
   declare mode_pick
   if [[ $pick == 2 ]]; then
     read -p "请输入要代理的站点路径" path
-    cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
+    cat > "/etc/nginx/sites-available/${name}.conf" << EOF
 server {
     listen 443 ssl;  # 监听 443 端口并启用 SSL
     server_name ${domain};  # 替换为你的域名
@@ -117,7 +116,7 @@ EOF
     if [[ $path =~ [0-9]+ ]]; then
         path="http://127.0.0.1:${path}"
     fi
-    cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
+    cat > "/etc/nginx/sites-available/${name}.conf" << EOF
 server {
     listen 443 ssl http2;  # 监听 443 端口，并启用 HTTP/2
     server_name ${domain};  # 替换为你的域名
