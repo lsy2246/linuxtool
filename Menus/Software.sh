@@ -88,7 +88,7 @@ if [[ ${soft_dick['docker']} == 2 ]];then
         docker_img_number[$docker_img_number_pick]=$i
         echo "${docker_img_number_pick}.${i}"
     done
-    read -p "请输入需要选择的镜像站：" docker_img_number_pick
+    read -p "请选择Docker镜像站：" docker_img_number_pick
     declare docker_img
     if [[ ! $docker_img_number_pick =~ [1-${#docker_imgs[@]}] ]];then
         docker_img='https://mirrors.sustc.edu.cn/docker-ce'
