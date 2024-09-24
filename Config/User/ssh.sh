@@ -1,10 +1,9 @@
 #!/bin/bash
 declare pick
-echo "========ssh========"
+echo "========$(basename $0 .sh)========"
 echo "1.更换ssh端口"
 echo "2.修改ssh登录方式"
 echo "任意输入返回主菜单"
-echo "========ssh========"
 read -p "请输入要使用的功能：" pick
 
 case $pick in

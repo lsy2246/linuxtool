@@ -1,13 +1,12 @@
 #!/bin/bash
 
 declare pick
-echo "========user========"
+echo "========$(basename $0 .sh)========"
 echo "1.新建用户"
 echo "2.查看所有用户"
 echo "3.删除用户"
 echo "4.修改用户密码"
 echo "任意输入返回主菜单"
-echo "========user========"
 read -p "请输入要使用的功能：" pick
 
 case $pick in
@@ -86,18 +85,18 @@ case $pick in
 '4')
   declare password
   declare user_name
-  read -p "请输入需要修改密码的用户" user_name
-  if ! id $user_name;then
+  read -p "请输入需要修改密码的用户：" user_name
+  if ! id $user_name &> /dev/null;then
     echo "系统内没有该用户"
     exit
   fi
-  read -p "请输入${user_name}密码：" password
+  read -p "请输入${user_name}需要修改的密码：" password
   echo "${user_name}:${password}" |chpasswd
   if [[ ${user_name} == "root" ]]; then
       sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
   fi
   sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
   systemctl restart sshd.service
-  echo "修改成功,用户${user_name}密码为：${password}"
+  echo "修改成功,用户${user_name}的密码为：${password}"
   ;;
 esac

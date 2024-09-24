@@ -1,5 +1,6 @@
 #!/bin/bash
 declare lang
+echo "========$(basename $0 .sh)========"
 echo "1.中文"
 echo "2.英文"
 read -p "请输入：" lang

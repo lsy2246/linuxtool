@@ -1,10 +1,9 @@
 #!/bin/bash
-echo "========key========"
+echo "========$(basename $0 .sh)========"
 echo "1.生成密钥"
 echo "2.安装密钥"
 echo "输入其他返回主页"
 declare pick
-echo "========key========"
 read -p "请输入要选择的命令：" pick
 
 function open_key() {

@@ -1,6 +1,7 @@
 #!/bin/bash
 declare pick
 declare server
+echo "========$(basename $0 .sh)========"
 echo "请选择下载服务器"
 echo "1.国内服务器"
 echo "2.国外服务器(默认)"

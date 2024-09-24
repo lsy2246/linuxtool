@@ -11,7 +11,7 @@ declare pick_array
 declare pick_number=6
 declare pick
 
-echo "========Docker========"
+echo "========$(basename $0 .sh)========"
 echo "1.换源"
 echo "2.清除所有未使用镜像"
 echo "-----一键搭建软件-----"
@@ -22,7 +22,6 @@ for i in "${path_script}/Config/${file_name}"/*;do
 done
 echo "-----一键搭建软件-----"
 echo "任意输入返回主菜单"
-echo "========Docker========"
 read -p "请输入要使用的功能：" pick
 
 clear
@@ -42,9 +41,9 @@ if [[ $pick == '1' ]];then
     read -p "请输入要选择的镜像,也可直接输入镜像网站：" img_pick
     if [[ -z $img_pick ]];then
       declare url='https://docker.m.daocloud.io'
-    elif [[ $img_pick =~ ^[http] ]];then
+    elif [[ $img_pick =~ [\w\.]+ ]];then
       declare url=$img_pick
-    elif [[ ${img_pick} -le 0 || ${img_pick} -ge ${!img_dick[*]} ]];then
+    elif [[ ${img_pick} =~ [1-${!img_dick[*]}]  ]];then
       img_pick=${img_number[$img_pick]}
       declare url=${img_dick[$img_pick]}
     else
@@ -52,13 +51,13 @@ if [[ $pick == '1' ]];then
       exit
     fi
     echo "{\"registry-mirrors\": [\"${url}\"]}" > "/etc/docker/daemon.json"
-    systemctl restart docker 2>> /dev/null|| echo "docker 重启失败"
+    systemctl restart docker 2>> /dev/null|| echo "docker 重启失败"&&exit
     echo "换源成功"
 
 elif [[ $pick == '2' ]];then
   docker system prune -af
   echo "清理完成"
-elif [[ "${pick}" -gt "$((${pick_number}-${#pick_array[*]}))" && "${pick}" -le "${pick_number}" ]];then
+elif [[ "${pick}" =~ [${pick_number}-${#pick_array[*]}] ]];then
     declare file_path
     read -p "请输入软件储存位置,默认 /var/www/${pick_array[${pick}]} ："  file_path
     if [[ -z ${file_path}  ]];then

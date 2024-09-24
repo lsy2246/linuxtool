@@ -1,5 +1,21 @@
 #!/bin/bash
 
+if ! command -v socat &> /dev/null; then
+    if [[ -f "/usr/bin/apt-get" ]];then
+      apt-get update -y
+      apt-get install socat -y
+    elif [[ -f "/usr/bin/apt" ]];then
+      apt update -y
+      apt install socat -y
+    elif [[ -f "/usr/bin/pacman" ]];then
+      pacman -Syu --noconfirm
+      pacman -Sy --noconfirm socat
+    else
+      echo "socat未安装"
+      exit
+    fi
+fi
+
 if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
   rm -rf ${HOME}/.acme.sh
   declare mail
@@ -38,13 +54,20 @@ read -p "请选择验证模式：" pick_mode
 
 case $pick_mode in
 '1')
-    declare pick_start
+    declare mode
+    if ! command -v nginx &> /dev/null; then
+      mode="nginx"
+    elif ! command -v apache &> /dev/null; then
+      mode="apache"
+    else
+      mode="standalone"
+    fi
     echo "请到服务器将80和443端口开启,将域名解析到本机"
     read -p "解析完成请输入 y：" pick_start
     if [[ ! $pick_start =~ [Yy] ]];then
       exit
     fi
-    eval "${HOME}/.acme.sh/acme.sh --issue $domain_str --standalone"
+    eval "${HOME}/.acme.sh/acme.sh --issue ${domain_str} --${mode}"
   ;;
 '2')
   declare pick=0
