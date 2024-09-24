@@ -175,6 +175,7 @@ server {
 }
 EOF
   fi
+  ln -s "/etc/nginx/sites-available/${name}.conf" "/etc/nginx/sites-enabled"
   nginx -s reload &> /dev/null
   echo "配置完成"
   ;;
