@@ -22,19 +22,19 @@ echo "1.新增站点配置文件"
 echo "2.查看已有站点配置文件"
 echo "3.删除站点配置文件"
 read -p "请选择：" pick
-case $pcik in
+case $pick in
 '1')
   declare domain
   read -p "请输入要绑定的域名多个用 空格 隔开：" domain
 
   declare ssl_certificate
   declare ssl_certificate_key
-  declare ssl_domain=${echo "${domain}" | awk '{print $1}'}
+  declare ssl_domain=$(echo "${domain}" | awk '{print $1}')
 
   declare ssl_pick=""
   echo "ssl证书地址"
   echo "1.立即申请（默认）"
-  echo "2.手动输入"
+  echo "2.手动输入："
   read -p "请选择" pick
   if [[ $pick == 2 ]]; then
       echo "证书,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
@@ -49,7 +49,7 @@ case $pcik in
         ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
       fi
   else
-    declare
+    declare ssl_pick
     echo "1.acme（默认）"
     read -p "请输入：" ssl_pick
     if [[ -z $ssl_pick || $ssl_pick == 1 ]];then
@@ -59,7 +59,7 @@ case $pcik in
     fi
   fi
   declare name
-  read -p "请输入配置文件名,默认为网址：" name
+  read -p "请输入配置文件名,默认为域名：" name
   if [[ -z $name ]]; then
       name=$ssl_domain
   fi
@@ -71,10 +71,7 @@ case $pcik in
   declare path
   declare mode_pick
   if [[ $pick == 2 ]]; then
-    read -p "请输入要代理的站点路径,如果只输入数字代表端口：" path
-    if [[ $path =~ [0-9]+ ]]; then
-        path="http://127.0.0.1:${path}"
-    fi
+    read -p "请输入要代理的站点路径" path
     cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
 server {
     listen 443 ssl http2;  # 监听 443 端口，并启用 HTTP/2
@@ -133,7 +130,10 @@ server {
 }
 EOF
   else
-    read -p "请输入后端服务器的地址" path
+    read -p "请输入后端服务器的地址,如果只输入数字代表端口：" path
+    if [[ $path =~ [0-9]+ ]]; then
+        path="http://127.0.0.1:${path}"
+    fi
     cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
 server {
     listen 443 ssl;  # 监听 443 端口并启用 SSL
