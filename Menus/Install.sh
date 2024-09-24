@@ -78,6 +78,10 @@ if [[ -e "${HOME}/.zshrc" ]];then
   echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.zshrc"
   source "${HOME}/.zshrc" &> /dev/null
 fi
+
+sed -i '/alias tool.*/d' "/etc/profile"
+echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "/etc/profile"
+
 alias tool="$path/linuxtool/Run.sh"
 
 echo "工具箱已经安装成功"

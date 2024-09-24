@@ -5,7 +5,7 @@ echo "2.安装密钥"
 echo "输入其他返回主页"
 declare pick
 echo "========key========"
-read -p "请输入要选择的命令" pick
+read -p "请输入要选择的命令：" pick
 
 case $pick in
 '1')
@@ -38,7 +38,7 @@ case $pick in
       echo "选择错误"
       exit
   fi
-  type=${type_dick[$pick]}
+  type=${print_arr[$pick]}
 
   if [ ! -z ${type_dick[$type]} ]; then
       echo "请选择密钥位大小"
