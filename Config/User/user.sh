@@ -77,8 +77,8 @@ case $pick in
     echo "系统内没有该用户"
     exit
   fi
-  sed -i "s/^#\?$user_name.*/d" /etc/sudoers
-  pkill -u root
+  sed -i "s/^#\?$user_name.*/d" /etc/sudoers &> /dev/null
+  pkill -u $user_name
   userdel -r $user_name &> /dev/null
   rm -rf "/home/${user_name}"
   echo "用户删除成功"

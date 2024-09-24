@@ -1,12 +1,16 @@
 #!/bin/bash
+if [[ $UID != 0 ]]; then
+    echo "请以root权限执行该脚本"
+    exit
+fi
 
 if ! command -v git &> /dev/null; then
     if [[ -f "/usr/bin/apt-get" ]];then
       apt-get update -y
-      apt-get install git
+      apt-get install git -y
     elif [[ -f "/usr/bin/apt" ]];then
       apt update -y
-      apt install git
+      apt install git -y
     elif [[ -f "/usr/bin/pacman" ]];then
       pacman -Syu --noconfirm
       pacman -Sy --noconfirm git
