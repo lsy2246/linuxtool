@@ -64,8 +64,8 @@ case $pick_mode in
   'TXT记录')
       declare domain
       declare log_output=$(${HOME}/.acme.sh/acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
-      declare -a domain=$( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}')
-      declare -a txt_value=$(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}')
+      declare -a domain=($( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}' | cut " "))
+      declare -a txt_value=($(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}'| cut " "))
       echo "请到dns系统解析TXT记录"
       for (( i = 0; i < ${#domain[@]}; i++ )); do
           echo "需要解析的第$((i+1))条"
