@@ -55,9 +55,9 @@ read -p "请选择验证模式：" pick_mode
 case $pick_mode in
 '1')
     declare mode
-    if ! command -v nginx &> /dev/null; then
+    if command -v nginx &> /dev/null; then
       mode="nginx"
-    elif ! command -v apache &> /dev/null; then
+    elif command -v apache &> /dev/null; then
       mode="apache"
     else
       mode="standalone"
