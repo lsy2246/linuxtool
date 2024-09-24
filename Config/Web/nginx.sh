@@ -31,32 +31,18 @@ case $pick in
   declare ssl_certificate_key
   declare ssl_domain=$(echo "${domain}" | awk '{print $1}')
 
-  declare ssl_pick=""
   echo "ssl证书地址"
-  echo "1.立即申请（默认）"
-  echo "2.手动输入："
   read -p "请选择" pick
-  if [[ $pick == 2 ]]; then
-      echo "证书,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
-      read -p "请输入证书地址：" ssl_certificate
-      if [[ -z $ssl_certificate ]];then
-        ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
-      fi
-      echo "密钥,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
+  echo "证书,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
+  read -p "请输入证书地址：" ssl_certificate
+  if [[ -z $ssl_certificate ]];then
+    ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
+  fi
+  echo "密钥,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
 
-      read -p "请输入密钥地址：" ssl_certificate_key
-      if [[ -z $ssl_certificate_key ]];then
-        ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
-      fi
-  else
-    declare ssl_pick
-    echo "1.acme（默认）"
-    read -p "请输入：" ssl_pick
-    if [[ -z $ssl_pick || $ssl_pick == 1 ]];then
-      ssl_pick=1
-      ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
-      ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
-    fi
+  read -p "请输入密钥地址：" ssl_certificate_key
+  if [[ -z $ssl_certificate_key ]];then
+    ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
   fi
   declare name
   read -p "请输入配置文件名,默认为域名：" name
@@ -72,6 +58,65 @@ case $pick in
   declare mode_pick
   if [[ $pick == 2 ]]; then
     read -p "请输入要代理的站点路径" path
+    cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
+server {
+    listen 443 ssl;  # 监听 443 端口并启用 SSL
+    server_name ${domain};  # 替换为你的域名
+
+    # SSL 证书配置
+    ssl_certificate ${ssl_certificate};  # 证书文件路径
+    ssl_certificate_key ${ssl_certificate_key};  # 证书密钥文件路径
+    ssl_protocols TLSv1.2 TLSv1.3;  # 仅使用安全的 TLS 协议版本
+    ssl_ciphers HIGH:!aNULL:!MD5;  # 安全的密码套件
+    ssl_prefer_server_ciphers on;  # 优先使用服务器的密码套件
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # HTTP/2 支持（可选）
+    listen 443 ssl http2;
+
+    # HSTS（HTTP 严格传输安全）强制浏览器使用 HTTPS
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # 静态文件目录
+    root ${path};
+    index index.html index.htm;
+
+    # 日志
+    access_log /var/log/nginx/example.com_access.log;
+    error_log /var/log/nginx/example.com_error.log;
+
+    # 默认处理
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    # 防止访问隐藏文件（如 .git）
+    location ~ /\. {
+        deny all;
+    }
+
+    # 错误页面配置
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/example.com/html;
+    }
+}
+
+# HTTP 到 HTTPS 重定向
+server {
+    listen 80;  # 监听 80 端口
+    server_name ${domain};
+
+    # 将所有 HTTP 请求重定向到 HTTPS
+    return 301 https://\$host\$request_uri;
+}
+EOF
+  else
+    read -p "请输入后端服务器的地址,如果只输入数字代表端口：" path
+    if [[ $path =~ [0-9]+ ]]; then
+        path="http://127.0.0.1:${path}"
+    fi
     cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
 server {
     listen 443 ssl http2;  # 监听 443 端口，并启用 HTTP/2
@@ -129,72 +174,8 @@ server {
     return 301 https://\$host\$request_uri;
 }
 EOF
-  else
-    read -p "请输入后端服务器的地址,如果只输入数字代表端口：" path
-    if [[ $path =~ [0-9]+ ]]; then
-        path="http://127.0.0.1:${path}"
-    fi
-    cat >> "/etc/nginx/sites-available/${name}.conf" << EOF
-server {
-    listen 443 ssl;  # 监听 443 端口并启用 SSL
-    server_name ${domain};  # 替换为你的域名
-
-    # SSL 证书配置
-    ssl_certificate ${ssl_certificate};  # 证书文件路径
-    ssl_certificate_key ${ssl_certificate_key};  # 证书密钥文件路径
-    ssl_protocols TLSv1.2 TLSv1.3;  # 仅使用安全的 TLS 协议版本
-    ssl_ciphers HIGH:!aNULL:!MD5;  # 安全的密码套件
-    ssl_prefer_server_ciphers on;  # 优先使用服务器的密码套件
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
-
-    # HTTP/2 支持（可选）
-    listen 443 ssl http2;
-
-    # HSTS（HTTP 严格传输安全）强制浏览器使用 HTTPS
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-
-    # 静态文件目录
-    root ${path};
-    index index.html index.htm;
-
-    # 日志
-    access_log /var/log/nginx/example.com_access.log;
-    error_log /var/log/nginx/example.com_error.log;
-
-    # 默认处理
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-
-    # 防止访问隐藏文件（如 .git）
-    location ~ /\. {
-        deny all;
-    }
-
-    # 错误页面配置
-    error_page 404 /404.html;
-    location = /404.html {
-        root /var/www/example.com/html;
-    }
-}
-
-# HTTP 到 HTTPS 重定向
-server {
-    listen 80;  # 监听 80 端口
-    server_name ${domain};
-
-    # 将所有 HTTP 请求重定向到 HTTPS
-    return 301 https://\$host\$request_uri;
-}
-EOF
   fi
-  case $ssl_pick in
-  1)
-    ./acme
-    ;;
-  esac
-  nginx -s reload
-  echo "配置成功"
+  nginx -s reload &> /dev/null
+  echo "配置完成"
   ;;
 esac
