@@ -40,7 +40,8 @@ case $pick in
   fi
   type=${print_arr[$pick]}
 
-  if [ ! -z ${type_dick[$type]} ]; then
+  if [ ! -z "${type_dick[$type]}" ]; then
+      print_number=0
       echo "请选择密钥位大小"
       for i in ${type_dick[$type]} ; do
             print_number=$(( print_number+1 ))
