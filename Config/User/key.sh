@@ -7,6 +7,25 @@ declare pick
 echo "========key========"
 read -p "请输入要选择的命令：" pick
 
+function open_key() {
+    chmod 600 "$HOME/.ssh/authorized_keys"
+    chmod 700 "$HOME/.ssh"
+
+    sed -i 's/^#\?PubkeyAuthentication.*/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
+
+    declare pick2
+    echo "是否关闭密码登录："
+    read -p "输入 n 取消关闭：" pick2
+
+    if [[ ! $pick2 =~ [Nn] ]];then
+        sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/g' /etc/ssh/sshd_config
+    fi
+
+    systemctl restart sshd.service
+
+    echo "密钥安装完成"
+}
+
 case $pick in
 '1')
   declare site="${HOME}/.ssh"
@@ -94,21 +113,3 @@ echo "$key" > "$HOME/.ssh/authorized_keys"
 open_key
 esac
 
-function open_key() {
-    chmod 600 "$HOME/.ssh/authorized_keys"
-    chmod 700 "$HOME/.ssh"
-
-    sed -i 's/^#\?PubkeyAuthentication.*/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
-
-    declare pick2
-    echo "是否关闭密码登录："
-    read -p "输入 n 取消关闭：" pick2
-
-    if [[ ! $pick2 =~ [Nn] ]];then
-        sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/g' /etc/ssh/sshd_config
-    fi
-
-    systemctl restart sshd.service
-
-    echo "密钥安装完成"
-}
