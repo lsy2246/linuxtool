@@ -53,6 +53,8 @@ case $pick in
       echo "1.nginx(默认)"
       read -p "请选择：" pick
       bash "${path_script}/Config/Web/acme.sh" "nginx" "${domain}"
+      ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
+      ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
   fi
 
 
