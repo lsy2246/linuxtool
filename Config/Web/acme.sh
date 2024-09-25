@@ -1,6 +1,11 @@
 #!/bin/bash
-
+declare pick_mode=$1
 declare domain_str=$2
+if ! [[ $pick_mode == "nginx" ]]; then
+    pick_mode=""
+    domain_str=""
+fi
+
 
 if ! command -v socat &> /dev/null; then
     if [[ -f "/usr/bin/apt-get" ]];then
@@ -51,7 +56,7 @@ if [[ $domain_str ]];then
   fi
 fi
 
-declare pick_mode
+
 echo "1.http验证"
 echo "2.dns验证"
 read -p "请选择验证模式：" pick_mode

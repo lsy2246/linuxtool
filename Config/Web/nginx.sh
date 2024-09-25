@@ -50,6 +50,7 @@ case $pick in
         ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
       fi
   else
+      echo ""
       declare ssl_domain=""
       for i in ${domain} ; do
           if ! [[ $i =~  [\w\.]+ ]]; then
@@ -58,7 +59,7 @@ case $pick in
           fi
           ssl_domain="${ssl_domain} -d ${i}"
       done
-      bash "${path_script}/Config/Web/acme.sh"
+      bash "${path_script}/Config/Web/acme.sh" "nginx" "${ssl_domain}"
   fi
 
 
