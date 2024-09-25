@@ -1,9 +1,10 @@
 #!/bin/bash
 declare pick_mode=$1
-declare domain_str=$2
+declare domain=$2
+
 if ! [[ $pick_mode == "nginx" ]]; then
     pick_mode=""
-    domain_str=""
+    domain=""
 fi
 
 if ! command -v socat &> /dev/null; then
@@ -25,7 +26,6 @@ fi
 if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
   rm -rf ${HOME}/.acme.sh
   declare mail
-  declare domain
   read -p "请输入用来申请域名的邮箱：" mail
   if [[ ! $mail =~ .*@.* ]];then
         echo "邮箱不合法"
@@ -35,26 +35,27 @@ if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
   curl https://get.acme.sh | sh -s "email=$mail"
 fi
 
+declare domain_str
 
-if [[ ! $domain_str ]];then
+if [[ ! $domain ]];then
   echo "请输入需要申请SSL证书的域名"
-  while(true);do
-    read -p "不输入退出添加：" domain
-    if [[ -z $domain ]];then
-      break
-    elif [[ ! $domain =~ [\w+\.]+ ]];then
+  read -p "请输入要绑定的域名多个用 空格 隔开：" domain
+fi
+
+
+for i in ${domain} ; do
+    if [[ ! $i =~ [\w+\.]+ ]];then
       echo "域名不合法"
       exit
     else
-      domain_str="$domain_str -d $domain"
+      domain_str="$domain_str -d $i"
     fi
-  done
-  if [[ -z $domain_str ]]; then
-      echo "需要添加的域名不能为空"
-      exit
-  fi
-fi
+done
 
+if [[ -z $domain_str ]]; then
+    echo "需要添加的域名不能为空"
+    exit
+fi
 
 echo "1.http验证"
 echo "2.dns验证"
@@ -87,7 +88,7 @@ EOF
 
     for (( i = 0; i < 6; i++ )); do
         sleep 15
-        if [[ -d "${HOME}/.acme.sh/$(echo "${domain_str}" | awk '{print $2}')_ecc/fullchain.cer" ]]; then
+        if [[ -d "${HOME}/.acme.sh/$(echo "${domain}" | awk '{print $2}')_ecc/fullchain.cer" ]]; then
           break
         fi
     done
@@ -109,7 +110,6 @@ EOF
 
   case ${mode_arr[$pick_mode]} in
   'TXT记录')
-      declare domain
       declare log_output=$(${HOME}/.acme.sh/acme.sh --issue --dns $domain_str --yes-I-know-dns-manual-mode-enough-go-ahead-please)
       declare -a domain=($( echo "$log_output" | grep "Domain:" | awk -F ": " '{print $2}'))
       declare -a txt_value=($(echo "$log_output" | grep "TXT value:" | awk -F ": " '{print $2}'))

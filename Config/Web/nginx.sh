@@ -33,8 +33,8 @@ case $pick in
   declare ssl_certificate_key
   declare ssl_domain=$(echo "${domain}" | awk '{print $1}')
 
-  echo "ssl证书地址"
-  echo "1.自动申请"
+  echo "ssl证书"
+  echo "1.自动申请(默认)"
   echo "2.手动输入"
   read -p "请输入：" pick
   if [[ $pick == 2 ]]; then
@@ -50,16 +50,9 @@ case $pick in
         ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
       fi
   else
-      echo ""
-      declare ssl_domain=""
-      for i in ${domain} ; do
-          if ! [[ $i =~  [\w\.]+ ]]; then
-            echo "域名输入错误"
-            exit
-          fi
-          ssl_domain="${ssl_domain} -d ${i}"
-      done
-      bash "${path_script}/Config/Web/acme.sh" "nginx" "${ssl_domain}"
+      echo "1.nginx(默认)"
+      read -p "请选择" pick
+      bash "${path_script}/Config/Web/acme.sh" "nginx" "${domain}"
   fi
 
 
