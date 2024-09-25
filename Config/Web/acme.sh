@@ -85,13 +85,6 @@ EOF
     echo "请到服务器将80和443端口开启,将域名解析到本机"
     read -p "解析完成请回车："
     eval "${HOME}/.acme.sh/acme.sh --issue ${domain_str} --${mode}"
-
-    for (( i = 0; i < 6; i++ )); do
-        sleep 15
-        if [[ -d "${HOME}/.acme.sh/$(echo "${domain}" | awk '{print $2}')_ecc/fullchain.cer" ]]; then
-          break
-        fi
-    done
     rm /etc/nginx/conf.d/test.conf
   ;;
 '2')

@@ -51,7 +51,7 @@ case $pick in
       fi
   else
       echo "1.nginx(默认)"
-      read -p "请选择" pick
+      read -p "请选择：" pick
       bash "${path_script}/Config/Web/acme.sh" "nginx" "${domain}"
   fi
 
