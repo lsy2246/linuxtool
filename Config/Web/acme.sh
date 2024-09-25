@@ -6,7 +6,6 @@ if ! [[ $pick_mode == "nginx" ]]; then
     domain_str=""
 fi
 
-
 if ! command -v socat &> /dev/null; then
     if [[ -f "/usr/bin/apt-get" ]];then
       apt-get update -y
@@ -37,7 +36,7 @@ if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
 fi
 
 
-if [[ $domain_str ]];then
+if [[ ! $domain_str ]];then
   echo "请输入需要申请SSL证书的域名"
   while(true);do
     read -p "不输入退出添加：" domain
@@ -66,7 +65,7 @@ case $pick_mode in
     declare mode
     if command -v nginx &> /dev/null; then
       mode="nginx"
-      cat > "/etc/nginx/conf.d/test" << EOF
+      cat > "/etc/nginx/conf.d/test.conf" << EOF
 server {
     listen       80;                  # 监听80端口
     server_name  ${domain};           # 服务器名称（本地）
@@ -85,7 +84,14 @@ EOF
     echo "请到服务器将80和443端口开启,将域名解析到本机"
     read -p "解析完成请回车："
     eval "${HOME}/.acme.sh/acme.sh --issue ${domain_str} --${mode}"
-    rm /etc/nginx/conf.d/test
+
+    for (( i = 0; i < 6; i++ )); do
+        sleep 15
+        if [[ -d "${HOME}/.acme.sh/$(echo "${domain_str}" | awk '{print $2}')_ecc/fullchain.cer" ]]; then
+          break
+        fi
+    done
+    rm /etc/nginx/conf.d/test.conf
   ;;
 '2')
   declare pick=0
