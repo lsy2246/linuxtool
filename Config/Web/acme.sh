@@ -1,5 +1,7 @@
 #!/bin/bash
 
+declare domain_str=$2
+
 if ! command -v socat &> /dev/null; then
     if [[ -f "/usr/bin/apt-get" ]];then
       apt-get update -y
@@ -29,22 +31,24 @@ if [[ ! -f "${HOME}/.acme.sh/acme.sh" ]];then
   curl https://get.acme.sh | sh -s "email=$mail"
 fi
 
-declare domain_str=''
-echo "请输入需要申请SSL证书的域名"
-while(true);do
-  read -p "不输入退出添加：" domain
-  if [[ -z $domain ]];then
-    break
-  elif [[ ! $domain =~ [\w+\.]+ ]];then
-    echo "域名不合法"
-    exit
-  else
-    domain_str="$domain_str -d $domain"
+
+if [[ $domain_str ]];then
+  echo "请输入需要申请SSL证书的域名"
+  while(true);do
+    read -p "不输入退出添加：" domain
+    if [[ -z $domain ]];then
+      break
+    elif [[ ! $domain =~ [\w+\.]+ ]];then
+      echo "域名不合法"
+      exit
+    else
+      domain_str="$domain_str -d $domain"
+    fi
+  done
+  if [[ -z $domain_str ]]; then
+      echo "需要添加的域名不能为空"
+      exit
   fi
-done
-if [[ -z $domain_str ]]; then
-    echo "需要添加的域名不能为空"
-    exit
 fi
 
 declare pick_mode
@@ -57,6 +61,17 @@ case $pick_mode in
     declare mode
     if command -v nginx &> /dev/null; then
       mode="nginx"
+      cat > "/etc/nginx/conf.d/test" << EOF
+server {
+    listen       80;                  # 监听80端口
+    server_name  ${domain};           # 服务器名称（本地）
+
+    location / {
+        root   /usr/share/nginx/html; # 指定根目录
+        index  index.html index.htm;  # 默认页面
+    }
+}
+EOF
     elif command -v apache &> /dev/null; then
       mode="apache"
     else
@@ -65,6 +80,7 @@ case $pick_mode in
     echo "请到服务器将80和443端口开启,将域名解析到本机"
     read -p "解析完成请回车："
     eval "${HOME}/.acme.sh/acme.sh --issue ${domain_str} --${mode}"
+    rm /etc/nginx/conf.d/test
   ;;
 '2')
   declare pick=0

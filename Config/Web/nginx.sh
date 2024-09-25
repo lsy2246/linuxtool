@@ -1,5 +1,7 @@
 #!/bin/bash
 
+declare path_script=$1
+
 if ! command -v nginx &> /dev/null; then
     if [[ -f "/usr/bin/apt-get" ]];then
       apt-get update -y
@@ -32,17 +34,35 @@ case $pick in
   declare ssl_domain=$(echo "${domain}" | awk '{print $1}')
 
   echo "ssl证书地址"
-  echo "证书,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
-  read -p "请输入证书地址：" ssl_certificate
-  if [[ -z $ssl_certificate ]];then
-    ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
-  fi
-  echo "密钥,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
+  echo "1.自动申请"
+  echo "2.手动输入"
+  read -p "请输入：" pick
+  if [[ $pick == 2 ]]; then
+      echo "证书,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
+      read -p "请输入证书地址：" ssl_certificate
+      if [[ -z $ssl_certificate ]];then
+        ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
+      fi
+      echo "密钥,默认 ${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
 
-  read -p "请输入密钥地址：" ssl_certificate_key
-  if [[ -z $ssl_certificate_key ]];then
-    ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
+      read -p "请输入密钥地址：" ssl_certificate_key
+      if [[ -z $ssl_certificate_key ]];then
+        ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
+      fi
+  else
+      declare ssl_domain=""
+      for i in ${domain} ; do
+          if ! [[ $i =~  [\w\.]+ ]]; then
+            echo "域名输入错误"
+            exit
+          fi
+          ssl_domain="${ssl_domain} -d ${i}"
+      done
+      bash "${path_script}/Config/Web/acme.sh"
   fi
+
+
+
   declare name
   read -p "请输入配置文件名,默认为域名：" name
   if [[ -z $name ]]; then
@@ -54,7 +74,6 @@ case $pick in
   echo "2.静态文件"
   read -p "请选择：" pick
   declare path
-  declare mode_pick
   if [[ $pick == 2 ]]; then
     read -p "请输入要代理的站点路径" path
     cat > "/etc/nginx/sites-available/${name}.conf" << EOF
@@ -174,7 +193,7 @@ server {
 }
 EOF
   fi
-  ln -s "/etc/nginx/sites-available/${name}.conf" "/etc/nginx/sites-enabled"
+  ln -s "/etc/nginx/sites-available/${name}.conf" "/etc/nginx/sites-enabled" &> /dev/null
   nginx -s reload &> /dev/null
   echo "配置完成"
   ;;

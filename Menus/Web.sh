@@ -17,5 +17,5 @@ echo "========Web========"
 read -p "请输入要使用的功能：" pick
 
 if [[ "${pick}" =~ [1-${#print_array[*]}] ]];then
-  bash "${path_script}/Config/${file_name}/${print_array[${pick}]}.sh"
+  bash "${path_script}/Config/${file_name}/${print_array[${pick}]}.sh" "${path_script}"
 fi
