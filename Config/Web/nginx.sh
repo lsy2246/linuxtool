@@ -154,7 +154,13 @@ server {
     access_log /var/log/nginx/${name}_access.log;
     error_log /var/log/nginx/${name}_error.log;
 
-    # 反向代理到后台应用
+    # 错误页面配置
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/example.com/html;
+    }
+
+    # 反向代理到后台应用 (常规 HTTP/HTTPS)
     location / {
         proxy_pass ${path};  # 反向代理到后端应用服务器
         proxy_set_header Host \$host;  # 保持原始主机头
@@ -169,6 +175,24 @@ server {
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
+        send_timeout 60s;
+    }
+
+    # WebSocket 反向代理到后台应用
+    location /ws {
+        proxy_pass ${path};  # 反向代理到 WebSocket 应用服务器
+        proxy_http_version 1.1;  # WebSocket 必须使用 HTTP 1.1
+        proxy_set_header Upgrade \$http_upgrade;  # 升级请求头，用于 WebSocket
+        proxy_set_header Connection "Upgrade";  # 持久连接，保持 WebSocket 连接
+        proxy_set_header Host \$host;  # 保持原始主机头
+        proxy_set_header X-Real-IP \$remote_addr;  # 传递客户端的真实 IP
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;  # 传递代理链中的 IP
+        proxy_set_header X-Forwarded-Proto \$scheme;  # 传递协议（HTTP 或 HTTPS）
+
+        # 超时时间配置 (WebSocket 是长连接)
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 3600s;  # WebSocket 长连接需较长读超时
         send_timeout 60s;
     }
 
@@ -187,6 +211,7 @@ server {
     # 将所有 HTTP 请求重定向到 HTTPS
     return 301 https://\$host\$request_uri;
 }
+
 EOF
   fi
   ln -s "/etc/nginx/sites-available/${name}.conf" "/etc/nginx/sites-enabled" &> /dev/null
