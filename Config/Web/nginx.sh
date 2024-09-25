@@ -74,7 +74,7 @@ case $pick in
     read -p "请输入要代理的站点路径" path
     cat > "/etc/nginx/sites-available/${name}.conf" << EOF
 server {
-    listen 443 ssl;  # 监听 443 端口并启用 SSL
+    listen 443 ssl http2;  # 监听 443 端口并启用 SSL 和 HTTP/2
     server_name ${domain};  # 替换为你的域名
 
     # SSL 证书配置
@@ -86,11 +86,22 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
-    # HTTP/2 支持（可选）
-    listen 443 ssl http2;
-
     # HSTS（HTTP 严格传输安全）强制浏览器使用 HTTPS
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # 设置文件传输的最大大小
+    client_max_body_size 100M;  # 上传文件最大大小 (例如 100MB)
+    proxy_max_temp_file_size 1024m;  # 代理最大临时文件大小
+
+    # 超时与缓冲设置
+    client_body_timeout 60s;  # 等待客户端发送请求主体的超时时间
+    client_header_timeout 60s;  # 等待客户端发送请求头的超时时间
+    send_timeout 60s;  # 发送响应的超时时间
+    client_body_buffer_size 128k;  # 上传缓冲区大小
+    proxy_buffer_size 4k;  # 设置代理服务器响应的缓冲区大小
+    proxy_buffers 8 16k;  # 代理服务器的缓冲区数和大小
+    proxy_busy_buffers_size 64k;  # 忙碌代理缓冲区大小
+    large_client_header_buffers 4 16k;  # 设置较大的客户端头部缓冲区，防止上传大文件时出现 413 错误
 
     # 静态文件目录
     root ${path};
@@ -125,6 +136,7 @@ server {
     # 将所有 HTTP 请求重定向到 HTTPS
     return 301 https://\$host\$request_uri;
 }
+
 EOF
   else
     read -p "请输入后端服务器的地址,如果只输入数字代表端口：" path
@@ -159,6 +171,20 @@ server {
     location = /404.html {
         root /var/www/example.com/html;
     }
+
+    # 设置文件传输的最大大小
+    client_max_body_size 100M;  # 上传文件最大大小 (例如 100MB)
+    proxy_max_temp_file_size 1024m;  # 代理最大临时文件大小
+
+    # 超时与缓冲设置
+    client_body_timeout 60s;  # 等待客户端发送请求主体的超时时间
+    client_header_timeout 60s;  # 等待客户端发送请求头的超时时间
+    send_timeout 60s;  # 发送响应的超时时间
+    client_body_buffer_size 128k;  # 上传缓冲区大小
+    proxy_buffer_size 4k;  # 设置代理服务器响应的缓冲区大小
+    proxy_buffers 8 16k;  # 代理服务器的缓冲区数和大小
+    proxy_busy_buffers_size 64k;  # 忙碌代理缓冲区大小
+    large_client_header_buffers 4 16k;  # 设置较大的客户端头部缓冲区，防止上传大文件时出现 413 错误
 
     # 反向代理到后台应用 (常规 HTTP/HTTPS)
     location / {
