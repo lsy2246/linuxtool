@@ -49,8 +49,8 @@ if [[ "${pick}" =~ [1-${#pick_array[*]}] ]];then
     clear
     if [[ -d "${path_local}/${pick_array[$pick]}" ]]; then
       path_local="${path_local}/${pick_array[$pick]}"
-    elif [[ -e "${path_script}/${pick_array[$pick]}.sh" ]]; then
-      bash "${path_script}/${pick_array[$pick]}.sh"
+    elif [[ -e "${path_local}/${pick_array[$pick]}.sh" ]]; then
+      bash "${path_local}/${pick_array[$pick]}.sh"
       path_local=$path_script
     fi
 else

@@ -11,7 +11,7 @@ case $pick in
   docker ps --format "{{.Names}}"
   ;;
 '2')
-  declare -a deocker_arr=($(docker ps --format "{{.Names}}"))
+  declare -a deocker_arr=($(docker ps --format "{{.Names}}" | cut -d ' ' -f1))
   declare deocker_number=0
   for i in "${!deocker_arr[@]}" ; do
     deocker_number=$(( deocker_number+1 ))
