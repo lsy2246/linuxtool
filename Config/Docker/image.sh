@@ -17,11 +17,11 @@ case $pick in
     docker_number=$(( docker_number+1 ))
     echo "${docker_number}.${i}"
   done
-  echo "要删除的镜像序号,多个镜像用 空格 隔开"
+  echo "要停止的镜像序号,多个镜像用 空格 隔开"
   read -p "请输入："  pick
   for i in $pick ; do
       if [[ $i =~ [1-$docker_number] ]]; then
-          docker rmi "${docker_arr[$i]}"
+          docker stop "${docker_arr[$(( i -1 ))]}"
       fi
   done
   ;;

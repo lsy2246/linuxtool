@@ -1,7 +1,5 @@
 #!/bin/bash
 
-declare path_script=$1
-
 if ! command -v nginx &> /dev/null; then
     if [[ -f "/usr/bin/apt-get" ]];then
       apt-get update -y
@@ -52,7 +50,7 @@ case $pick in
   else
       echo "1.nginx(默认)"
       read -p "请选择：" pick
-      bash "${path_script}/Config/Web/acme.sh" "nginx" "${domain}"
+      bash "$(dirname $0)/acme/apply" "nginx" "${domain}"
       ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
       ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
   fi

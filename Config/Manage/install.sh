@@ -63,30 +63,30 @@ if ! [[ -d "${path}/linuxtool" ]];then
   exit
 fi
 
-chmod +x "$path/linuxtool/Run.sh" &> /dev/null
+chmod +x "$path/linuxtool/run.sh" &> /dev/null
 
 if [[ -e "${HOME}/.bashrc" ]];then
   sed -i '/alias tool.*/d' "${HOME}/.bashrc"
-  echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.bashrc"
+  echo "alias tool='$path/linuxtool/run.sh'" | cat >> "${HOME}/.bashrc"
   source "${HOME}/.bashrc" &> /dev/null
 fi
 
 if [[ -e "${HOME}/.profile" ]];then
   sed -i '/alias tool.*/d' "${HOME}/.profile"
-  echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.profile"
+  echo "alias tool='$path/linuxtool/run.sh'" | cat >> "${HOME}/.profile"
   source "${HOME}/.profile" &> /dev/null
 fi
 
 if [[ -e "${HOME}/.zshrc" ]];then
   sed -i '/alias tool.*/d' "${HOME}/.zshrc"
-  echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "${HOME}/.zshrc"
+  echo "alias tool='$path/linuxtool/run.sh'" | cat >> "${HOME}/.zshrc"
   source "${HOME}/.zshrc" &> /dev/null
 fi
 
 sed -i '/alias tool.*/d' "/etc/profile"
-echo "alias tool='$path/linuxtool/Run.sh'" | cat >> "/etc/profile"
+echo "alias tool='$path/linuxtool/run.sh'" | cat >> "/etc/profile"
 
-alias tool="$path/linuxtool/Run.sh"
+alias tool="$path/linuxtool/run.sh"
 
 echo "工具箱已经安装成功"
 echo "位置：${path}/linuxtool"

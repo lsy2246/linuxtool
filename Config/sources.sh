@@ -12,14 +12,13 @@ sources_dick['网易云']='https://mirrors.163.com'
 
 declare -a pcik_array
 declare pick=0
-echo "========Sources========"
+echo "========$(basename $0 .sh)========"
 for i in "${!sources_dick[@]}";
 do
   pick=$(( pick+1 ))
   pcik_array[$pick]=$i
   echo "${pick}.${i}"
 done
-echo "========Sources========"
 read -p "请输入：" pick
 
 

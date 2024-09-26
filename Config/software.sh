@@ -38,7 +38,7 @@ soft_dick['zsh-beautify']=1
 soft_dick['docker']=1
 soft_dick['x-cmd']=1
 
-echo "======一键安装常用软件======"
+echo "========$(basename $0 .sh)========"
 for i in "${!soft_dick[@]}" ; do
     soft_number=$(( soft_number+1 ))
     soft_array[$soft_number]=$i
