@@ -3,11 +3,11 @@ echo "1.查看已经安装的站点"
 echo "2.删除软件"
 
 declare pick
-read -p "请输入" pick
+read -p "请输入：" pick
 
 declare path="/var/www"
 echo "请输入站点安装地址,默认${path}"
-read -p "请输入" path
+read -p "请输入：" path
 
 if [[ -z $path ]]; then
     path="/var/www"
@@ -19,6 +19,9 @@ fi
 case $pick in
 '1')
   for i in "$path"/* ; do
+      if [[ $i == "${path}/*" ]];then
+        echo "该地址不存在站点"
+      fi
       echo $i
   done
   ;;
@@ -35,9 +38,11 @@ case $pick in
   read -p "请输入要删除的序号,多个用 空格 隔开：" site_name
   for i in $site_name ; do
       if [[ $i =~ [1-${#site_arr[*]}] ]]; then
+          echo "开始删除 ${site_arr[$i]}"
           cd "$path/${site_arr[$i]}"
-          docker compose down
-          rm -rf "$path/${site_arr[$i]}"
+          docker compose down &> /dev/null && echo "站点已经停止运行"
+          rm -rf "$path/${site_arr[$i]}" &> /dev/null
+          echo "删除完成"
       fi
   done
   echo "删除完成"

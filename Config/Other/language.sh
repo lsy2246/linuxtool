@@ -16,6 +16,7 @@ else
   echo "暂不支持该系统一键更换语言"
   exit
 fi
+echo "正在更新配置文件"
 sed -i '/^#/! s/^/# /' /etc/locale.gen
 if ! grep LC_ALL /etc/default/locale &> /dev/null; then
     echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale

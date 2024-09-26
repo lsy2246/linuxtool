@@ -34,8 +34,10 @@ case $pick in
     echo "输入错误"
     exit
   fi
+  echo "正在写入配置文件"
   echo "{\"registry-mirrors\": [\"${url}\"]}" > "/etc/docker/daemon.json"
-  systemctl restart docker 2>> /dev/null|| echo "docker 重启失败"&&exit
+  echo "正在重启docker"
+  systemctl restart docker 2>> /dev/null  || echo "docker 重启失败"&&exit
   echo "换源成功"
 
   ;;

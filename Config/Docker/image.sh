@@ -21,7 +21,9 @@ case $pick in
   read -p "请输入："  pick
   for i in $pick ; do
       if [[ $i =~ [1-$docker_number] ]]; then
+          echo "正在停止 ${docker_arr[$(( i -1 ))]}"
           docker stop "${docker_arr[$(( i -1 ))]}"
+          echo "${docker_arr[$(( i -1 ))]} 已经停止"
       fi
   done
   ;;
