@@ -57,6 +57,7 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
 EOF
+chown -R git:git $path
 sudo docker compose up -d
 
 sudo -u git ssh -p $(( port+22 )) -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
