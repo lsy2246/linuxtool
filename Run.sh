@@ -18,8 +18,12 @@ do
 if [[ -e "${path_local}/test.sh" ]]; then
     bash "${path_local}/test.sh"
 fi
+if [[ -e "${path_local}/menu.sh" ]]; then
+    bash "${path_local}/menu.sh" "$path_local"
+    path_local=$path_script
+fi
 pick_number=0
-echo "======$(basename $0 .sh)======"
+echo "======$(basename $path_local .sh)======"
 for i in "${path_local}"/*
 do
     file_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")

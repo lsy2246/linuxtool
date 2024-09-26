@@ -1,17 +1,20 @@
 #!/bin/bash
-declare file_name=$(basename $0 .sh)
-declare path_script=$1
+declare path_local=$1
 declare pick
-echo "========Automation========"
+declare file_name
+echo "========$(basename $0 .sh)========"
 declare print_number=0
 declare -a print_array
-for i in "${path_script}/Config/${file_name}"/*;do
+for i in "${path_local}"/*;do
+    file_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
+    if [[ $file_name == "test" ]]; then
+      continue
+    fi
     print_number=$((print_number + 1))
-    print_array[$print_number]=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
-    echo "${print_number}.${print_array[$print_number]}"
+    print_array[$print_number]=$file_name
+    echo "${print_number}.${file_name}"
 done
 echo "输入其他任意返回主页"
-echo "========Automation========"
 read -p "请输入：" pick
 
 if [[ ! ${pick} =~ [1-$print_number] ]];then
@@ -49,11 +52,11 @@ if [[ "$cron" == '* * * * * ' ]];then
    exit
 fi
 
-if [[ -f "${path_script}/Config/${file_name}/${print_array[pick]}.sh" ]];then
+if [[ -f "${path_local}/${print_array[pick]}.sh" ]];then
   echo "该路径文件已经存在"
 fi
 
-bash "${path_script}/Config/${file_name}/${print_array[pick]}.sh" "$path"
+bash "${path_local}/${print_array[pick]}.sh" "$path"
 
 chmod +x "${path}/${print_array[pick]}.sh"
 declare cron_job="${cron} ${path}/${print_array[pick]}.sh"
