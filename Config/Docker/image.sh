@@ -11,17 +11,17 @@ case $pick in
   docker ps --format "{{.Names}}"
   ;;
 '2')
-  declare -a deocker_arr=($(docker ps --format "{{.Names}}"))
-  declare deocker_number=0
-  for i in "${!docker_arr[@]}" ; do
-    deocker_number=$(( deocker_number+1 ))
-    echo "${deocker_number}.${i}"
+  declare -a docker_arr=($(docker ps --format "{{.Names}}"))
+  declare docker_number=0
+  for i in "${docker_arr[@]}" ; do
+    docker_number=$(( docker_number+1 ))
+    echo "${docker_number}.${i}"
   done
   echo "要删除的镜像序号,多个镜像用 空格 隔开"
   read -p "请输入："  pick
   for i in $pick ; do
-      if [[ $i =~ [1-$deocker_number] ]]; then
-          docker rmi "${deocker_arr[$i]}"
+      if [[ $i =~ [1-$docker_number] ]]; then
+          docker rmi "${docker_arr[$i]}"
       fi
   done
   ;;
