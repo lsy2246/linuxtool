@@ -7,7 +7,7 @@ declare print_number=0
 declare -a print_array
 for i in "${path_local}"/*;do
     file_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
-    if [[ $file_name == "test" ]]; then
+    if [[ $file_name == "test" || $file_name == "menu" ]]; then
       continue
     fi
     print_number=$((print_number + 1))

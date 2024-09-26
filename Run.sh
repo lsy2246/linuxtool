@@ -17,8 +17,12 @@ while true
 do
 if [[ -e "${path_local}/test.sh" ]]; then
     bash "${path_local}/test.sh"
+    if [[ $? -eq 1 ]]; then
+        path_local=$path_script
+    fi
 fi
 if [[ -e "${path_local}/menu.sh" ]]; then
+    clear
     bash "${path_local}/menu.sh" "$path_local"
     path_local=$path_script
 fi

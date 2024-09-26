@@ -19,7 +19,7 @@ for item in "$web_path"/* ; do
     echo "${item_name}"
 done
 
-echo "请输入需要屏蔽的目录用逗号隔开"
+echo "请输入需要屏蔽的目录用  空格 隔开"
 read -p "请输入：" ignore
 
 
