@@ -27,6 +27,7 @@ if [[ -e "${path_local}/menu.sh" ]]; then
     path_local=$path_script
 fi
 pick_number=0
+pick_array=()
 echo "======$(basename $path_local .sh)======"
 for i in "${path_local}"/*
 do
