@@ -30,6 +30,11 @@ do
     pick_array[$pick_number]=$file_name
     echo "${pick_number}.${pick_array[$pick_number]}"
 done
+
+if [[ $path_local != $path_script  ]]; then
+    echo "输入任意返回主页"
+fi
+
 read -p "请输入要使用的功能：" pick
 if [[ "${pick}" =~ [1-${#pick_array[*]}] ]];then
     clear
@@ -40,7 +45,10 @@ if [[ "${pick}" =~ [1-${#pick_array[*]}] ]];then
       path_local=$path_script
     fi
 else
-    exit
+  if [[ $path_local == $path_script  ]]; then
+      exit
+  fi
+  path_local=$path_script
 fi
 
 done
