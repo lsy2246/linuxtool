@@ -73,9 +73,9 @@ if [[ ${soft_dick['x-cmd']} == 2 ]];then
 fi
 
 if [[ ${soft_dick['docker']} == 2 ]];then
+    echo "请选择docker下载镜像站"
     declare -A docker_imgs
     docker_imgs['官方']='https://download.docker.com'
-    docker_imgs['中国科技大学(默认)']='https://mirrors.ustc.edu.cn/docker-ce'
     docker_imgs['清华大学']='https://mirrors.tuna.tsinghua.edu.cn/docker-ce'
     docker_imgs['阿里云']='https://mirrors.aliyun.com/docker-ce'
     docker_imgs['网易云']='https://mirrors.163.com/docker-ce'
@@ -90,11 +90,11 @@ if [[ ${soft_dick['docker']} == 2 ]];then
     done
     read -p "请选择Docker镜像站：" docker_img_number_pick
     declare docker_img
-    if [[ ! $docker_img_number_pick =~ [1-${#docker_imgs[@]}] ]];then
-        docker_img='https://mirrors.sustc.edu.cn/docker-ce'
-    else
+    if [[ $docker_img_number_pick =~ [1-${#docker_imgs[@]}] ]];then
         docker_img_number_pick=${docker_img_number[$docker_img_number_pick]}
         docker_img=${docker_imgs[$docker_img_number_pick]}
+    else
+        docker_img=${docker_imgs[1]}
     fi
 
     if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then

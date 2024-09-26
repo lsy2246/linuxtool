@@ -19,3 +19,4 @@ fi
 
 sed -i '/alias tool.*/d' "/etc/profile"
 echo "脚本已经卸载完整,公众号 lsy22 可以获取一键安装脚本"
+kill $PPID

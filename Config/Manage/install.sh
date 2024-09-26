@@ -91,3 +91,4 @@ alias tool="$path/linuxtool/run.sh"
 echo "工具箱已经安装成功"
 echo "位置：${path}/linuxtool"
 echo "命令：tool"
+kill $PPID
