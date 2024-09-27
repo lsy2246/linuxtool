@@ -88,13 +88,13 @@ if [[ ${soft_dick['docker']} == 2 ]];then
         docker_img_number[$docker_img_number_pick]=$i
         echo "${docker_img_number_pick}.${i}"
     done
-    read -p "请选择Docker镜像站：" docker_img_number_pick
+    read -p "请选择Docker镜像站(默认 ${docker_img_number[1]})：" docker_img_number_pick
     declare docker_img
     if [[ $docker_img_number_pick =~ [1-${#docker_imgs[@]}] ]];then
         docker_img_number_pick=${docker_img_number[$docker_img_number_pick]}
         docker_img=${docker_imgs[$docker_img_number_pick]}
     else
-        docker_img=${docker_imgs[1]}
+        docker_img=${docker_imgs[${docker_img_number[1]}]}
     fi
 
     if [[ ${pkg} == 'apt' || ${pkg} == 'apt-get' ]];then
