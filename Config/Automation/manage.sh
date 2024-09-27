@@ -17,6 +17,7 @@ fi
 
 case $pick in
 '1')
+  echo "该系统安装了以下脚本"
   for i in "$path"/* ; do
       if [[ $i == "${path}/*" ]];then
         echo "该地址不存在脚本"
@@ -50,6 +51,5 @@ case $pick in
           echo "删除完成"
       fi
   done
-  echo "删除完成"
   ;;
 esac

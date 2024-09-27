@@ -60,7 +60,6 @@ bash "${path_local}/${print_array[pick]}.sh" "$path"
 
 chmod +x "${path}/${print_array[pick]}.sh" && echo "脚本执行权限添加成功" || echo "脚本执行权限添加失败"
 declare cron_job="${cron} ${path}/${print_array[pick]}.sh"
-echo "正在配置自动任务"
 (crontab -l 2>/dev/null | grep -v "${print_array[pick]}.sh") | crontab -
 (crontab -l 2>/dev/null; echo "$cron_job") | crontab -
 
