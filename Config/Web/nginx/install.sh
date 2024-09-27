@@ -24,12 +24,10 @@ if [[ $pick == 2 ]]; then
 else
     echo "1.nginx(默认)"
     read -p "请选择：" pick
-    bash "$(dirname $0)/acme/apply.sh" "nginx" "${domain}"
+    bash "$(dirname $(dirname $0))/acme/apply.sh" "nginx" "${domain}"
     ssl_certificate="${HOME}/.acme.sh/${ssl_domain}_ecc/fullchain.cer"
     ssl_certificate_key="${HOME}/.acme.sh/${ssl_domain}_ecc/${ssl_domain}.key"
 fi
-
-
 
 declare name
 read -p "请输入配置文件名,默认为域名：" name

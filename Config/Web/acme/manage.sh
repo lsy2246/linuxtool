@@ -12,7 +12,7 @@ case $pick in
 
   for i in "${HOME}/.acme.sh"/* ; do
       print_name=$(basename $i )
-      if ! echo $print_name | grep _ecc ; then
+      if ! echo "$print_name" | grep -q "_ecc" ; then
         continue
       fi
       print_name=$(echo $print_name | sed "s/_ecc//g" )
@@ -20,7 +20,7 @@ case $pick in
       print_arr[$print_number]=$print_name
       echo "${print_number}.${print_name}"
   done
-  read -p "请选择要查看证书的详细信息" pick
+  read -p "请输入要查看证书详细信息的序号：" pick
   if [[ $pick =~ [1-${#print_arr[@]}] ]]; then
       bash "${HOME}/.acme.sh -info -d ${print_arr[$pick]}"
   else
