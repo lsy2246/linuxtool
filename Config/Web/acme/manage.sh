@@ -22,7 +22,7 @@ case $pick in
   done
   read -p "请输入要查看证书详细信息的序号：" pick
   if [[ $pick =~ [1-${#print_arr[@]}] ]]; then
-      bash "${HOME}/.acme.sh -info -d ${print_arr[$pick]}"
+      bash "${HOME}/.acme.sh/acme.sh -info -d ${print_arr[$pick]}"
   else
     echo "选择错误"
   fi
