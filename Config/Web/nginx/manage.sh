@@ -19,6 +19,10 @@ case $pick in
       echo "${site_number}.${site_name}"
       site_arr[$site_number]=$site_name
   done
+  if [ ${#site_arr[@]} == 0 ]; then
+      echo "暂时没有配置文件"
+      exit
+  fi
   ;;
 '2')
   declare -a site_arr
@@ -34,6 +38,10 @@ case $pick in
       echo "${site_number}.${site_name}"
       site_arr[$site_number]=$site_name
   done
+  if [ ${#site_arr[@]} == 0 ]; then
+      echo "暂时没有配置文件"
+      exit
+  fi
   read -p "请输入要删除的序号,多个用 空格 隔开：" site_name
   for i in $site_name ; do
       if [[ $i =~ [1-${#site_arr[*]}] ]]; then

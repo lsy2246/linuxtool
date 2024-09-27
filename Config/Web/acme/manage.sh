@@ -20,6 +20,10 @@ case $pick in
       print_arr[$print_number]=$print_name
       echo "${print_number}.${print_name}"
   done
+  if [ ${#print_arr[@]} == 0 ]; then
+      echo "暂时没有安装证书"
+      exit
+  fi
   read -p "请输入要查看证书详细信息的序号：" pick
   if [[ $pick =~ [1-${#print_arr[@]}] ]]; then
       bash "${HOME}/.acme.sh/acme.sh -info -d ${print_arr[$pick]}"
