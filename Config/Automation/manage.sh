@@ -21,7 +21,7 @@ case $pick in
       if [[ $i == "${path}/*" ]];then
         echo "该地址不存在脚本"
       fi
-      echo $i
+      basename $i
   done
   ;;
 '2')
@@ -33,8 +33,11 @@ case $pick in
         echo "该地址不存在脚本"
         exit 
       fi
-      script_number=$(( script_number+1 ))
       script_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
+      if [[ $script_name == "linuxtool" ]]; then
+          continue
+      fi
+      script_number=$(( script_number+1 ))
       echo "${script_number}.${script_name}"
       script_arr[$script_number]=$script_name
   done
