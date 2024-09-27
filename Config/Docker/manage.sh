@@ -30,6 +30,10 @@ case $pick in
   declare site_name
   declare site_number=0
   for i in "$path"/* ; do
+      if [[ $i == "${path}/*" ]];then
+        echo "该地址不存在站点"
+        exit
+      fi
       site_number=$(( site_number+1 ))
       site_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
       echo "${site_number}.${site_name}"
