@@ -11,6 +11,8 @@ declare port=$2
 sudo useradd -m git
 sudo -u git ssh-keygen -t rsa -b 4096 -C "Gitea Host Key" -f /home/git/.ssh/id_rsa -N ""
 sudo -u git sh -c 'cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys'
+sudo -u git sh -c 'chmod a+x /usr/local/bin/gitea'
+sudo -u git sh -c 'echo "ssh -p '$(( port+22 ))' -o StrictHostKeyChecking=no git@127.0.0.1 \"SSH_ORIGINAL_COMMAND=\\\"\$SSH_ORIGINAL_COMMAND\\\" \$0 \$@\"" > /usr/local/bin/gitea'
 declare uid=$( id git | awk -F'[=() ]+' '{print $2}' )
 declare gid=$( id git | awk -F'[=() ]+' '{print $5}' )
 
@@ -59,6 +61,4 @@ services:
 EOF
 chown -R git:git $path
 sudo docker compose up -d
-
-sudo -u git ssh -p $(( port+22 )) -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
 
