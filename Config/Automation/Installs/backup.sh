@@ -90,7 +90,9 @@ for item in "$web_path"/*; do
           continue
     fi
     cd "\$item" || exit
+    docker compose down
     tar -czf "\${item_name}_\${date_time}.tar.gz" \$(ls)
+    docker compose up -d
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
     ${path}/aliyunpan/aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
     mkdir -p "${loacl_path}/\${year}/\${item_name}" && cp "\${item_name}_\${date_time}.tar.gz" "${loacl_path}/\${year}/\${item_name}"
