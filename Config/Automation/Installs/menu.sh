@@ -35,7 +35,7 @@ echo "斜线（/）：用于指定间隔值"
 echo "连字符（-）：用于指定范围"
 
 declare tmp_time
-declare -a cron_array=("分钟" "小时" "天数" "月份" "星期" )
+declare -a cron_array=("分钟	0–59" "小时	0–23" "天数	1–31" "月份	1–12" "星期	0–7" )
 for i in "${cron_array[@]}";do
   read -p "${i}，默认为 * ：" tmp_time
   if [[ $tmp_time =~ ^[0-9]+$ || $tmp_time == '*' ]];then
