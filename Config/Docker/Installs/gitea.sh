@@ -5,18 +5,18 @@ if ! command -v sudo &> /dev/null; then
     exit
 fi
 
-declare installation_directory=$1
-declare web_service_port=$2
+declare install_path=$1
+declare service_port=$2
 
 sudo useradd -m git
 sudo -u git ssh-keygen -t rsa -b 4096 -C "Gitea Host Key" -f /home/git/.ssh/id_rsa -N ""
 sudo -u git sh -c 'cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys'
 sudo -u git sh -c 'chmod a+x /usr/local/bin/gitea'
-sudo -u git sh -c 'echo "ssh -p '$(( web_service_port+22 ))' -o StrictHostKeyChecking=no git@127.0.0.1 \"SSH_ORIGINAL_COMMAND=\\\"\$SSH_ORIGINAL_COMMAND\\\" \$0 \$@\"" > /usr/local/bin/gitea'
+sudo -u git sh -c 'echo "ssh -p '$(( service_port+22 ))' -o StrictHostKeyChecking=no git@127.0.0.1 \"SSH_ORIGINAL_COMMAND=\\\"\$SSH_ORIGINAL_COMMAND\\\" \$0 \$@\"" > /usr/local/bin/gitea'
 declare user_id=$( id git | awk -F'[=() ]+' '{print $2}' )
 declare group_id=$( id git | awk -F'[=() ]+' '{print $5}' )
 
-cd $installation_directory
+cd $install_path
 cat > "docker-compose.yml" << EOF
 networks:
   gitea:
@@ -42,8 +42,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /home/git/.ssh/:/data/git/.ssh
     ports:
-      - "${web_service_port}:3000"
-      - "$(( web_service_port+22 )):22"
+      - "${service_port}:3000"
+      - "$(( service_port+22 )):22"
     depends_on:
       - db
   db:
@@ -59,6 +59,6 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
 EOF
-chown -R git:git $installation_directory
+chown -R git:git $install_path
 sudo docker compose up -d
 

@@ -1,7 +1,7 @@
 #!/bin/bash
-declare installation_directory=$1
-declare web_service_port=$2
-cd $installation_directory
+declare install_path=$1
+declare service_port=$2
+cd $install_path
 cat > "docker-compose.yml" << EOF
 version: '3.8'
 services:
@@ -12,7 +12,7 @@ services:
     volumes:
       - ./:/opt/alist/data
     ports:
-      - "${web_service_port}:5244"
+      - "${service_port}:5244"
 EOF
 docker compose up -d || echo "安装失败" && exit
 declare admin_password=$( docker exec -it alist ./alist admin random | grep password | awk '{print $4}')

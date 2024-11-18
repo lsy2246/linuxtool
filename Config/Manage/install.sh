@@ -64,28 +64,21 @@ fi
 
 chmod +x "$path/linuxtool/run.sh" &> /dev/null
 
-if [[ -e "${HOME}/.bashrc" ]];then
-  sed -i '/alias tool.*/d' "${HOME}/.bashrc"
-  echo "alias tool='$path/linuxtool/run.sh'" | cat >> "${HOME}/.bashrc"
-  source "${HOME}/.bashrc" &> /dev/null
-fi
+update_alias() {
+  local file="$1"
+  if [[ -e "$file" ]]; then
+    sed -i '/alias tool.*/d' "$file"
+    echo "alias tool='$path/linuxtool/run.sh'" >> "$file"
+    source "$file" &> /dev/null
+  fi
+}
 
-if [[ -e "${HOME}/.profile" ]];then
-  sed -i '/alias tool.*/d' "${HOME}/.profile"
-  echo "alias tool='$path/linuxtool/run.sh'" | cat >> "${HOME}/.profile"
-  source "${HOME}/.profile" &> /dev/null
-fi
-
-if [[ -e "${HOME}/.zshrc" ]];then
-  sed -i '/alias tool.*/d' "${HOME}/.zshrc"
-  echo "alias tool='$path/linuxtool/run.sh'" | cat >> "${HOME}/.zshrc"
-  source "${HOME}/.zshrc" &> /dev/null
-fi
-
-sed -i '/alias tool.*/d' "/etc/profile"
-echo "alias tool='$path/linuxtool/run.sh'" | cat >> "/etc/profile"
+for file in "${HOME}/.bashrc" "${HOME}/.profile" "${HOME}/.zshrc" "/etc/profile"; do
+  update_alias "$file"
+done
 
 alias tool="$path/linuxtool/run.sh"
+
 
 echo "工具箱已经安装成功"
 echo "位置：${path}/linuxtool"

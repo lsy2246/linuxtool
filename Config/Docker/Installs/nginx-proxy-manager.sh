@@ -1,8 +1,8 @@
 #!/bin/bash
-declare installation_directory=$1
-declare web_service_port=$2
+declare install_path=$1
+declare service_port=$2
 
-cd $installation_directory
+cd $install_path
 cat > docker-compose.yml << EOF
 services:
   app:
@@ -11,11 +11,11 @@ services:
     ports:
       - '80:80'
       - '443:443'
-      - '${web_service_port}:81'
+      - '${service_port}:81'
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
 EOF
 docker compose up -d
-echo "管理员邮箱: admin@example.com"
-echo "管理员密码: changeme"
+echo "Email: admin@example.com"
+echo "Password: changeme"
