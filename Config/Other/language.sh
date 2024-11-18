@@ -1,9 +1,9 @@
 #!/bin/bash
-declare lang
+declare language_choice
 echo "========$(basename $0 .sh)========"
-echo "1.中文"
-echo "2.英文"
-read -p "请输入：" lang
+echo "1. 中文"
+echo "2. 英文"
+read -p "请输入：" language_choice
 if [[ -f "/usr/bin/apt-get" ]];then
   apt-get update -y
   apt-get install -y locales
@@ -21,7 +21,7 @@ sed -i '/^#/! s/^/# /' /etc/locale.gen
 if ! grep LC_ALL /etc/default/locale &> /dev/null; then
     echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
 fi
-case $lang in
+case $language_choice in
 '1')
   sed -i 's/.*zh_CN.UTF-8.*/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
   sed -i "s/^LANG.*/LANG=zh_CN.UTF-8/g" /etc/default/locale

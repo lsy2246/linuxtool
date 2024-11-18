@@ -1,32 +1,32 @@
 #!/bin/bash
 echo "1.查看已经成功申请证书的域名"
 
-declare pick
-read -p "请输入：" pick
+declare user_choice
+read -p "请输入选择：" user_choice
 
-case $pick in
+case $user_choice in
 '1')
-  declare print_name
-  declare print_number=0
-  declare -a print_arr
+  declare certificate_name
+  declare certificate_count=0
+  declare -a certificate_array
 
   for i in "${HOME}/.acme.sh"/* ; do
-      print_name=$(basename $i )
-      if ! echo "$print_name" | grep -q "_ecc" ; then
+      certificate_name=$(basename $i )
+      if ! echo "$certificate_name" | grep -q "_ecc" ; then
         continue
       fi
-      print_name=$(echo $print_name | sed "s/_ecc//g" )
-      print_number=$(( print_number+1 ))
-      print_arr[$print_number]=$print_name
-      echo "${print_number}.${print_name}"
+      certificate_name=$(echo $certificate_name | sed "s/_ecc//g" )
+      certificate_count=$(( certificate_count+1 ))
+      certificate_array[$certificate_count]=$certificate_name
+      echo "${certificate_count}.${certificate_name}"
   done
-  if [ ${#print_arr[@]} == 0 ]; then
+  if [ ${#certificate_array[@]} == 0 ]; then
       echo "暂时没有安装证书"
       exit
   fi
-  read -p "请输入要查看证书详细信息的序号：" pick
-  if [[ $pick =~ [1-${#print_arr[@]}] ]]; then
-      bash "${HOME}/.acme.sh/acme.sh -info -d ${print_arr[$pick]}"
+  read -p "请输入要查看证书详细信息的序号：" user_choice
+  if [[ $user_choice =~ [1-${#certificate_array[@]}] ]]; then
+      bash "${HOME}/.acme.sh/acme.sh -info -d ${certificate_array[$user_choice]}"
   else
     echo "选择错误"
   fi

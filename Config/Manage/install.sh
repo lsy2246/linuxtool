@@ -39,7 +39,6 @@ declare url
 echo "请选择脚本的下载地址"
 url_dick['github(default)']='https://github.com/lsy2246/linuxtool.git'
 url_dick['gitee']='https://gitee.com/lsy22/linuxtool.git'
-url_dick['gitlsy']='https://g.lsy22.com/lsy/linuxtool.git'
 
 for i in "${!url_dick[@]}" ; do
     url_number=$(( url_number+1 ))

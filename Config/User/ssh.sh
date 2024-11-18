@@ -1,68 +1,68 @@
 #!/bin/bash
-declare pick
+declare user_choice
 echo "========$(basename $0 .sh)========"
-echo "1.更换ssh端口"
-echo "2.修改ssh登录方式"
+echo "1. 更换 SSH 端口"
+echo "2. 修改 SSH 登录方式"
 echo "任意输入返回主菜单"
-read -p "请输入要使用的功能：" pick
+read -p "请输入要使用的功能：" user_choice
 
-case $pick in
+case $user_choice in
 '1')
-  read -p "请输入需要修改的端口号(默认22): " port_number
+  read -p "请输入需要修改的端口号（默认22）: " new_port
 
-  if [[ -z $port_number ]];then
-      port_number=22
+  if [[ -z $new_port ]];then
+      new_port=22
   fi
 
-  if ! [[ $port_number =~ ^[0-9]+$ ]] || ! ((port_number > 0 && port_number < 65535)); then
-      echo "端口不合法"
+  if ! [[ $new_port =~ ^[0-9]+$ ]] || ! ((new_port > 0 && new_port < 65535)); then
+      echo "端口号不合法"
       exit
   fi
 
-  if lsof -i :$port_number -t >/dev/null; then
-      echo "$port_number 端口已被占用"
+  if lsof -i :$new_port -t >/dev/null; then
+      echo "$new_port 端口已被占用"
       exit
   fi
 
-  sed -i "s/^#\?Port.*/Port $port_number/g" /etc/ssh/sshd_config
+  sed -i "s/^#\?Port.*/Port $new_port/g" /etc/ssh/sshd_config
 
   systemctl restart sshd.service
 
-  echo "端口已经修改为$port_number，记得防火墙放行"
+  echo "端口已修改为$new_port，请确保防火墙放行该端口"
   ;;
 '2')
-  declare pick_root
-  declare pick2_key
-  declare pick2_password
-  echo "是否关闭root登录"
-  read -p "输入 n 关闭：" pick_root
+  declare root_login_choice
+  declare password_auth_choice
+  declare key_auth_choice
+  echo "是否关闭 root 用户登录"
+  read -p "输入 n 关闭：" root_login_choice
   echo "是否关闭密码登录"
-  read -p "输入 n 关闭：" pick2_password
+  read -p "输入 n 关闭：" password_auth_choice
   echo "是否关闭密钥登录"
-  read -p "输入 n 关闭：" pick2_key
+  read -p "输入 n 关闭：" key_auth_choice
 
-  if [[ ! $pick_root =~ [Nn] ]];then
+  if [[ ! $root_login_choice =~ [Nn] ]];then
       sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
-      echo "root用户登录：开启"
+      echo "root 用户登录：已开启"
   else
       sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/g' /etc/ssh/sshd_config
-      echo "root用户登录：关闭"
+      echo "root 用户登录：已关闭"
   fi
 
-  if [[ ! $pick2_password =~ [Nn] ]];then
+  if [[ ! $password_auth_choice =~ [Nn] ]];then
       sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-      echo "密码登录：开启"
+      echo "密码登录：已开启"
   else
       sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/g' /etc/ssh/sshd_config
-      echo "密码登录：关闭"
+      echo "密码登录：已关闭"
   fi
 
-  if [[ ! $pick2_key =~ [Nn] ]];then
+  if [[ ! $key_auth_choice =~ [Nn] ]];then
       sed -i 's/^#\?PubkeyAuthentication.*/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
-      echo "密钥登录：开启"
+      echo "密钥登录：已开启"
   else
       sed -i 's/^#\?PubkeyAuthentication.*/PubkeyAuthentication no/g' /etc/ssh/sshd_config
-      echo "密钥登录：关闭"
+      echo "密钥登录：已关闭"
   fi
 
   systemctl restart sshd.service

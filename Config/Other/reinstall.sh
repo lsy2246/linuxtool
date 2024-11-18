@@ -1,55 +1,55 @@
 #!/bin/bash
-declare pick
-declare server
+declare server_choice
+declare download_server
 echo "========$(basename $0 .sh)========"
 echo "请选择下载服务器"
-echo "1.国内服务器"
-echo "2.国外服务器(默认)"
-read -p "请输入：" pick
-if [[ $pick == '1' ]];then
-  server="https://jihulab.com/bin456789/reinstall/-/raw/main/reinstall.sh"
+echo "1. 国内服务器"
+echo "2. 国外服务器（默认）"
+read -p "请输入：" server_choice
+if [[ $server_choice == '1' ]];then
+  download_server="https://jihulab.com/bin456789/reinstall/-/raw/main/reinstall.sh"
 else
-  server="https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh"
+  download_server="https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh"
 fi
 
-declare -A imags_dick
-declare -a imags_arr
-declare imags_number=0
-imags_dick['arch']=""
-imags_dick['kali']=""
-imags_dick['debian']="8 9 10 11 12"
-imags_dick['Ubuntu']="16.04 18.04 20.04 22.04 24.04"
+declare -A image_options
+declare -a image_list
+declare image_count=0
+image_options['arch']=""
+image_options['kali']=""
+image_options['debian']="8 9 10 11 12"
+image_options['Ubuntu']="16.04 18.04 20.04 22.04 24.04"
 
-for i in "${!imags_dick[@]}" ; do
-    imags_number=$(( imags_number+1 ))
-    imags_arr[$imags_number]=$i
-    echo "${imags_number}.${i}"
+for image in "${!image_options[@]}" ; do
+    image_count=$(( image_count+1 ))
+    image_list[$image_count]=$image
+    echo "${image_count}.${image}"
 done
 
-read -p "请选择需要安装的镜像序号：" pick
+read -p "请选择需要安装的镜像序号：" selected_image
 
-if [[ $pick =~ [1-"${#imags_dick[@]}"\ ] ]];then
-  declare img=${imags_arr[$pick]}
-  declare version=''
-  declare -a version_arr
-  declare version_number=0
-  if [[ ! -z ${imags_dick[$img]} ]];then
+if [[ $selected_image =~ [1-"${#image_options[@]}"\ ] ]];then
+  declare selected_image_name=${image_list[$selected_image]}
+  declare selected_version=''
+  declare -a version_list
+  declare version_count=0
+  if [[ ! -z ${image_options[$selected_image_name]} ]];then
     echo "请输入要安装的版本（默认最新）"
-    for i in ${imags_dick[$img]} ; do
-      version_number=$(( version_number+1 ))
-      version_arr[$version_number]=$i
-      echo "${version_number}.${i}"
+    for version in ${image_options[$selected_image_name]} ; do
+      version_count=$(( version_count+1 ))
+      version_list[$version_count]=$version
+      echo "${version_count}.${version}"
     done
-    read -p "请输入：" pick
-    if [ -z $pick ]; then
-      version=${version_arr[$version_number]}
-    elif [[ $pick =~ [1-$version_number] ]];then
-      version=${version_arr[$pick]}
+    read -p "请输入：" selected_version
+    if [ -z $selected_version ]; then
+      selected_version=${version_list[$version_count]}
+    elif [[ $selected_version =~ [1-$version_count] ]];then
+      selected_version=${version_list[$selected_version]}
     fi
   fi
-  eval "bash <(curl -Ls ${server}) ${img} ${version}"
-  echo "重启之后开始重装系统"
-  echo "用服务器厂家的VNC连接可以看到重装进度"
+  eval "bash <(curl -Ls ${download_server}) ${selected_image_name} ${selected_version}"
+  echo "重启后开始重装系统"
+  echo "用服务器厂家的 VNC 连接可以看到重装进度"
 else
   echo "选择错误"
 fi

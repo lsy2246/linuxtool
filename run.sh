@@ -5,59 +5,58 @@ if [[ $UID != 0 ]]; then
     exit
 fi
 
-declare -a pick_array
-declare pick_number
-declare pick
-declare path_script=$(dirname $0)
-path_script="${path_script}/Config"
-declare path_local=$path_script
-declare file_name
+declare -a function_array
+declare selected_function
+declare script_path=$(dirname $0)
+script_path="${script_path}/Config"
+declare local_path=$script_path
+declare script_name
 
 while true
 do
-if [[ -e "${path_local}/test.sh" ]]; then
-    bash "${path_local}/test.sh"
+if [[ -e "${local_path}/test.sh" ]]; then
+    bash "${local_path}/test.sh"
     if [[ $? -eq 1 ]]; then
-        path_local=$path_script
+        local_path=$script_path
     fi
 fi
-if [[ -e "${path_local}/menu.sh" ]]; then
+if [[ -e "${local_path}/menu.sh" ]]; then
     clear
-    bash "${path_local}/menu.sh" "$path_local"
-    path_local=$path_script
+    bash "${local_path}/menu.sh" "$local_path"
+    local_path=$script_path
 fi
-pick_number=0
-pick_array=()
-echo "======$(basename $path_local .sh)======"
-for i in "${path_local}"/*
+selected_function=0
+function_array=()
+echo "======$(basename $local_path .sh)======"
+for i in "${local_path}"/*
 do
-    file_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
-    if [[ $file_name == "test" ]]; then
+    script_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
+    if [[ $script_name == "test" ]]; then
       continue
     fi
-    pick_number=$((pick_number + 1))
-    pick_array[$pick_number]=$file_name
-    echo "${pick_number}.${pick_array[$pick_number]}"
+    selected_function=$((selected_function + 1))
+    function_array[$selected_function]=$script_name
+    echo "${selected_function}.${function_array[$selected_function]}"
 done
 
-if [[ $path_local != $path_script  ]]; then
+if [[ $local_path != $script_path  ]]; then
     echo "输入任意返回主页"
 fi
 
-read -p "请输入要使用的功能：" pick
-if [[ "${pick}" =~ [1-${#pick_array[*]}] ]];then
+read -p "请输入要使用的功能：" user_choice
+if [[ "${user_choice}" =~ [1-${#function_array[*]}] ]];then
     clear
-    if [[ -d "${path_local}/${pick_array[$pick]}" ]]; then
-      path_local="${path_local}/${pick_array[$pick]}"
-    elif [[ -e "${path_local}/${pick_array[$pick]}.sh" ]]; then
-      bash "${path_local}/${pick_array[$pick]}.sh"
-      path_local=$path_script
+    if [[ -d "${local_path}/${function_array[$user_choice]}" ]]; then
+      local_path="${local_path}/${function_array[$user_choice]}"
+    elif [[ -e "${local_path}/${function_array[$user_choice]}.sh" ]]; then
+      bash "${local_path}/${function_array[$user_choice]}.sh"
+      local_path=$script_path
     fi
 else
-  if [[ $path_local == $path_script  ]]; then
+  if [[ $local_path == $script_path  ]]; then
       exit
   fi
-  path_local=$path_script
+  local_path=$script_path
 fi
 
 done

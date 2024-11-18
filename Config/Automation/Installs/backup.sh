@@ -1,49 +1,47 @@
 #!/bin/bash
 
-declare path="$1"
-declare web_path
-declare local_pick
-declare baidu_pick
-declare aliyun_pick
-declare ignore=1
+declare backup_path="$1"
+declare data_directory
+declare local_backup_choice
+declare baidu_backup_choice
+declare aliyun_backup_choice
+declare ignore_flag=1
 
-
-read -p "请输入数据目录,默认 /var/www ：" web_path
-if [[ -z ${web_path} ]];then
-  web_path='/var/www'
+read -p "请输入数据目录，默认 /var/www ：" data_directory
+if [[ -z ${data_directory} ]];then
+  data_directory='/var/www'
 fi
 
-for item in "$web_path"/* ; do
-    [[ $ignore -eq 1 ]] && echo "当前脚本会备份的目录如下" && ignore=
+for item in "$data_directory"/* ; do
+    [[ $ignore_flag -eq 1 ]] && echo "当前脚本会备份的目录如下" && ignore_flag=
     declare item_name=$(basename "$item")
     echo "${item_name}"
 done
 
-echo "请输入需要屏蔽的目录用  空格 隔开"
+echo "请输入需要屏蔽的目录，用空格隔开"
 read -p "请输入：" ignore
 
+read -p "是否备份到本地，默认关闭，输入 y 开启：" local_backup_choice
+read -p "是否备份到百度网盘，默认开启，输入 n 关闭：" baidu_backup_choice
+read -p "是否备份到阿里云盘，默认开启，输入 n 关闭：" aliyun_backup_choice
 
-read -p "是否备份到本地，默认 关闭 ，输入 y 开启：" local_pick
-read -p "是否备份到百度网盘，默认 开启 ，输入 n 关闭：" baidu_pick
-read -p "是否备份到阿里云盘 默认 开启 ， 输入 n 关闭：" aliyun_pick
-
-if [[ ! $local_pick =~ [Yy] && $baidu_pick =~ [Nn] && $aliyun_pick =~ [Nn] ]];then
+if [[ ! $local_backup_choice =~ [Yy] && $baidu_backup_choice =~ [Nn] && $aliyun_backup_choice =~ [Nn] ]];then
   echo "没有选择备份的选项"
   exit
 fi
 
-if [[ $local_pick =~ [Yy] ]];then
-  declare loacl_path
-  read -p "请输入本地备份路径,默认 /var/webbackup ：" loacl_path
-  if [[ -z $loacl_path ]];then
-    loacl_path='/var/webbackup'
+if [[ $local_backup_choice =~ [Yy] ]];then
+  declare local_backup_path
+  read -p "请输入本地备份路径，默认 /var/webbackup ：" local_backup_path
+  if [[ -z $local_backup_path ]];then
+    local_backup_path='/var/webbackup'
   fi
-  if [[ -d $loacl_path ]];then
-    mkdir -p "$loacl_path"
+  if [[ -d $local_backup_path ]];then
+    mkdir -p "$local_backup_path"
   fi
 fi
 
-if [[ ! $baidu_pick =~ [Nn] ]];then
+if [[ ! $baidu_backup_choice =~ [Nn] ]];then
   if [[ -f "/usr/bin/apt-get" ]];then
      sudo apt-get install python3-venv -y
   elif [[ -f "/usr/bin/apt" ]];then
@@ -51,40 +49,39 @@ if [[ ! $baidu_pick =~ [Nn] ]];then
   elif [[ -f "/usr/bin/pacman" ]];then
        sudo pacman -Sy python3-venv --noconfirm
   else
-     echo "无法自动安装 python3-venv 请手动安装"
+     echo "无法自动安装 python3-venv，请手动安装"
      exit
   fi
-  python3 -m venv "${path}/venv"
-  source "${path}/venv/bin/activate"
+  python3 -m venv "${backup_path}/venv"
+  source "${backup_path}/venv/bin/activate"
   pip install bypy
   pip install requests
-  echo "1.将提示中的链接粘贴到浏览器中登录"
-  echo "2.输入账号密码登录后授权，获取授权码"
-  echo "3.将授权码粘贴回终端并按回车"
+  echo "1. 将提示中的链接粘贴到浏览器中登录"
+  echo "2. 输入账号密码登录后授权，获取授权码"
+  echo "3. 将授权码粘贴回终端并按回车"
   bypy info
 fi
 
-
-if [[ ! $aliyun_pick =~ [Nn] ]];then
-  if [[ ! -d "${path}/aliyunpan" ]];then
-    wget -P "${path}" https://github.com/tickstep/aliyunpan/releases/download/v0.3.2/aliyunpan-v0.3.2-linux-amd64.zip -O "${path}/aliyunpan.zip"
-    unzip "${path}/aliyunpan.zip" -d "${path}"
-    rm "${path}/aliyunpan.zip"
-    mv "${path}/$(ls "${path}" | grep "aliyunpan")" "${path}/aliyunpan"
+if [[ ! $aliyun_backup_choice =~ [Nn] ]];then
+  if [[ ! -d "${backup_path}/aliyunpan" ]];then
+    wget -P "${backup_path}" https://github.com/tickstep/aliyunpan/releases/download/v0.3.2/aliyunpan-v0.3.2-linux-amd64.zip -O "${backup_path}/aliyunpan.zip"
+    unzip "${backup_path}/aliyunpan.zip" -d "${backup_path}"
+    rm "${backup_path}/aliyunpan.zip"
+    mv "${backup_path}/$(ls "${backup_path}" | grep "aliyunpan")" "${backup_path}/aliyunpan"
   fi
-  if [[ "$( ${path}/aliyunpan/aliyunpan who)" == "未登录账号" ]];then
-    ${path}/aliyunpan/aliyunpan login
+  if [[ "$( ${backup_path}/aliyunpan/aliyunpan who)" == "未登录账号" ]];then
+    ${backup_path}/aliyunpan/aliyunpan login
   fi
 fi
 
-cat > "${path}/backup.sh" << EOF
+cat > "${backup_path}/backup.sh" << EOF
 #!/bin/bash
 declare date_time=\$(date +"%Y_%m_%d") # 日期格式
 declare year=\$(date +"%Y") #年份
 declare ignore="$ignore"
-source "${path}/venv/bin/activate"
+source "${backup_path}/venv/bin/activate"
 
-for item in "$web_path"/*; do
+for item in "$data_directory"/*; do
     declare item_name=\$(basename "\$item")
     if [[ "\$ignore" =~ \$item_name ]];then
           continue
@@ -94,27 +91,27 @@ for item in "$web_path"/*; do
     tar -czf "\${item_name}_\${date_time}.tar.gz" \$(ls)
     docker compose up -d
     bypy upload "\${item_name}_\${date_time}.tar.gz" "/\${item_name}/"
-    ${path}/aliyunpan/aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
-    mkdir -p "${loacl_path}/\${year}/\${item_name}" && cp "\${item_name}_\${date_time}.tar.gz" "${loacl_path}/\${year}/\${item_name}"
+    ${backup_path}/aliyunpan/aliyunpan upload "\${item_name}_\${date_time}.tar.gz" "/网站/\${item_name}/\${year}/"
+    mkdir -p "${local_backup_path}/\${year}/\${item_name}" && cp "\${item_name}_\${date_time}.tar.gz" "${local_backup_path}/\${year}/\${item_name}"
     rm "\${item_name}_\${date_time}.tar.gz"
 done
 EOF
 
-if [[ $local_pick == [Yy] ]];then
-  echo "本地备份路径：${web_path}/年份/目录名称"
+if [[ $local_backup_choice == [Yy] ]];then
+  echo "本地备份路径：${data_directory}/年份/目录名称"
 else
-  sed -i '/mkdir.*/d' "${path}/backup.sh"
+  sed -i '/mkdir.*/d' "${backup_path}/backup.sh"
 fi
 
-if [[ $baidu_pick == [Nn] ]];then
-  sed -i '/bypy.*/d' "${path}/backup.sh"
-  sed -i '/source.*/d' "${path}/backup.sh"
+if [[ $baidu_backup_choice == [Nn] ]];then
+  sed -i '/bypy.*/d' "${backup_path}/backup.sh"
+  sed -i '/source.*/d' "${backup_path}/backup.sh"
 else
   echo "百度网盘备份路径：我的应用数据/bypy/目录名称"
 fi
 
-if [[ $baidu_pick == [Nn] ]];then
-  sed -i '/.*aliyunpan.*/d' "/var/script/backup.sh"
+if [[ $aliyun_backup_choice == [Nn] ]];then
+  sed -i '/.*aliyunpan.*/d' "${backup_path}/backup.sh"
 else
   echo "阿里云盘备份路径：网盘/目录名称/日期"
 fi

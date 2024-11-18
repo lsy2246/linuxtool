@@ -11,7 +11,7 @@ if ! command -v nginx &> /dev/null; then
       pacman -Syu --noconfirm
       pacman -Sy --noconfirm nginx
     else
-      echo "nginx未安装"
+      echo "nginx未安装，请手动安装"
       exit
     fi
 fi

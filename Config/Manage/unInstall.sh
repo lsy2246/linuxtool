@@ -1,7 +1,7 @@
 #!/bin/bash
-declare path=$(cat /etc/profile | grep "tool=" | awk -F "=" '{print $2}' | tr -d "'")
-path=$(dirname $path)
-rm -rf $path
+declare tool_path=$(cat /etc/profile | grep "tool=" | awk -F "=" '{print $2}' | tr -d "'")
+tool_path=$(dirname $tool_path)
+rm -rf $tool_path
 if [[ -e "${HOME}/.bashrc" ]];then
   sed -i '/alias tool.*/d' "${HOME}/.bashrc"
   source "${HOME}/.bashrc" &> /dev/null
@@ -18,5 +18,5 @@ if [[ -e "${HOME}/.zshrc" ]];then
 fi
 
 sed -i '/alias tool.*/d' "/etc/profile"
-echo "脚本已经卸载完整,公众号 lsy22 可以获取一键安装脚本"
+echo "脚本已完整卸载，公众号 lsy22 可获取一键安装脚本"
 kill $PPID &> /dev/null

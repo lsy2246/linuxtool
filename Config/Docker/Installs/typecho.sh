@@ -1,7 +1,7 @@
 #!/bin/bash
-declare path=$1
-declare port=$2
-cd $path
+declare installation_directory=$1
+declare web_service_port=$2
+cd $installation_directory
 
 mkdir data
 mkdir php
@@ -55,7 +55,7 @@ services: # 定义多个服务
     nginx: # 服务名称
         image: nginx # 使用的镜像
         ports: # 映射的端口
-            - "${port}:80" # 宿主机端口 ${port} 映射到容器端口 80
+            - "${web_service_port}:80" # 宿主机端口 ${web_service_port} 映射到容器端口 80
         restart: always # 容器重启策略
         volumes: # 映射文件
             - ./data:/var/www/html # 网站源代码
@@ -99,13 +99,11 @@ wget https://github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip -O 
 unzip typecho.zip 
 rm typecho.zip 
 
-cd $path
+cd $installation_directory
 
-sudo chown -R 1000:1000 $path
-
+sudo chown -R 1000:1000 $installation_directory
 
 sudo chmod -R 777 data
-
 
 sudo docker compose up -d
 
@@ -114,6 +112,6 @@ echo "数据库用户名：root"
 echo "数据库密码：typecho"
 echo "数据库名：typecho"
 
-echo "安装完成在${path}/data/config.inc.php末尾加上,防止排版错误"
+echo "安装完成，请在${installation_directory}/data/config.inc.php末尾添加，防止排版错误"
 echo "define('__TYPECHO_SECURE__',true);"
 

@@ -1,70 +1,70 @@
 #!/bin/bash
-echo "1.查看已经安装的脚本"
-echo "2.删除脚本"
+echo "1. 查看已安装的脚本"
+echo "2. 删除脚本"
 
-declare pick
-read -p "请输入：" pick
+declare user_choice
+read -p "请输入您的选择：" user_choice
 
-declare path="/var/script"
-echo "请输入脚本安装地址,默认${path}"
-read -p "请输入：" path
+declare script_directory="/var/script"
+echo "请输入脚本安装目录，默认是 ${script_directory}"
+read -p "请输入：" script_directory
 
-if [[ -z $path ]]; then
-    path="/var/script"
-elif ! [[ -d $path ]]; then
-    echo "该地址不存在目录"
+if [[ -z $script_directory ]]; then
+    script_directory="/var/script"
+elif ! [[ -d $script_directory ]]; then
+    echo "该目录不存在"
 fi
 
-case $pick in
+case $user_choice in
 '1')
-  declare -a script_arr
+  declare -a installed_scripts
   declare script_name
-  declare script_number=0
-  for i in "$path"/* ; do
-      if [[ $i == "${path}/*" ]];then
-        echo "该地址不存在脚本"
+  declare script_count=0
+  for script in "$script_directory"/* ; do
+      if [[ $script == "${script_directory}/*" ]];then
+        echo "该目录没有脚本"
         exit
       fi
-      script_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
+      script_name=$(awk -F '.' '{print $1}' <<< "$(basename $script)")
       if [[ $script_name == "linuxtool" ]]; then
           continue
       fi
-      script_number=$(( script_number+1 ))
-      echo "${script_number}.${script_name}"
-      script_arr[$script_number]=$script_name
+      script_count=$(( script_count+1 ))
+      echo "${script_count}.${script_name}"
+      installed_scripts[$script_count]=$script_name
   done
-  if [ ${#script_arr[@]} == 0 ]; then
-      echo "该地址不存在脚本"
+  if [ ${#installed_scripts[@]} == 0 ]; then
+      echo "该目录没有脚本"
       exit
   fi
   ;;
 '2')
-  declare -a script_arr
+  declare -a installed_scripts
   declare script_name
-  declare script_number=0
-  for i in "$path"/* ; do
-      if [[ $i == "${path}/*" ]];then
-        echo "该地址不存在脚本"
+  declare script_count=0
+  for script in "$script_directory"/* ; do
+      if [[ $script == "${script_directory}/*" ]];then
+        echo "该目录没有脚本"
         exit
       fi
-      script_name=$(awk -F '.' '{print $1}' <<< "$(basename $i)")
+      script_name=$(awk -F '.' '{print $1}' <<< "$(basename $script)")
       if [[ $script_name == "linuxtool" ]]; then
           continue
       fi
-      script_number=$(( script_number+1 ))
-      echo "${script_number}.${script_name}"
-      script_arr[$script_number]=$script_name
+      script_count=$(( script_count+1 ))
+      echo "${script_count}.${script_name}"
+      installed_scripts[$script_count]=$script_name
   done
-  if [ ${#script_arr[@]} == 0 ]; then
-      echo "该地址不存在脚本"
+  if [ ${#installed_scripts[@]} == 0 ]; then
+      echo "该目录没有脚本"
       exit
   fi
-  read -p "请输入要删除的序号,多个用 空格 隔开：" script_name
+  read -p "请输入要删除的序号（多个用空格隔开）：" script_name
   for i in $script_name ; do
-      if [[ $i =~ [1-${#script_arr[@]}] ]]; then
-          echo "开始删除 ${script_arr[$i]}"
-          (crontab -l 2>/dev/null | grep -v "${script_arr[$i]}") | crontab - && echo "已经删除脚本的自动任务"
-          rm -rf "$path/${script_arr[$i]}" &> /dev/null
+      if [[ $i =~ [1-${#installed_scripts[@]}] ]]; then
+          echo "开始删除 ${installed_scripts[$i]}"
+          (crontab -l 2>/dev/null | grep -v "${installed_scripts[$i]}") | crontab - && echo "已删除脚本的自动任务"
+          rm -rf "$script_directory/${installed_scripts[$i]}" &> /dev/null
           echo "删除完成"
       fi
   done
