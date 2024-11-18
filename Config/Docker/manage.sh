@@ -47,6 +47,6 @@ case $user_choice in
             echo "删除完成"
         fi
     done
-    echo "删除完成"
+    echo "全部删除完成"
     ;;
 esac
