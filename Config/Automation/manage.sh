@@ -3,10 +3,12 @@
 echo "1. 查看已安装的脚本"
 echo "2. 删除脚本"
 
+declare user_choice
 read -p "请输入您的选择：" user_choice
 
-script_directory="/var/script"
-read -p "请输入脚本安装目录，默认是 ${script_directory}：" input_directory
+declare script_directory="/var/script"
+echo "请输入脚本安装目录，默认是 ${script_directory}："
+read -p "请输入：" input_directory
 
 if [[ -n $input_directory ]]; then
     script_directory="$input_directory"
@@ -18,9 +20,7 @@ if [[ ! -d $script_directory ]]; then
 fi
 
 function list_scripts() {
-    local installed_scripts=()
     local script_count=0
-
     for script in "$script_directory"/*; do
         if [[ ! -e $script ]]; then
             echo "该目录没有脚本"
@@ -32,15 +32,13 @@ function list_scripts() {
         fi
         script_count=$((script_count + 1))
         echo "${script_count}.${script_name}"
-        installed_scripts+=("$script_name")
+        installed_scripts[$script_count]=$script_name
     done
 
     if [[ ${#installed_scripts[@]} -eq 0 ]]; then
         echo "该目录没有脚本"
         return
     fi
-
-    echo "${installed_scripts[@]}"
 }
 
 case $user_choice in
@@ -48,7 +46,8 @@ case $user_choice in
         list_scripts
         ;;
     '2')
-        installed_scripts=($(list_scripts))
+        declare -a installed_scripts
+        list_scripts
         read -p "请输入要删除的序号（多个用空格隔开）：" script_indices
 
         for index in $script_indices; do
