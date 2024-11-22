@@ -4,30 +4,34 @@ read -p "请输入要绑定的域名（多个用空格隔开）：" domain_names
 declare ssl_cert_path
 declare ssl_key_path
 declare primary_domain=$(echo "${domain_names}" | awk '{print $1}')
-
+declare folder_domain
 echo "SSL证书选择"
 echo "1.自动申请（默认）"
 echo "2.手动输入"
 read -p "请输入选择：" user_choice
 if [[ $user_choice == 2 ]]; then
-    echo "证书路径, 默认 ${HOME}/.acme.sh/${primary_domain}_ecc/fullchain.cer"
+
+    folder_domain=$(ls ${HOME}/.acme.sh/ | grep "^${primary_domain}" | head -n1)
+    echo "证书路径, 默认 ${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/fullchain.cer"
     read -p "请输入证书地址：" ssl_cert_path
     if [[ -z $ssl_cert_path ]];then
-      ssl_cert_path="${HOME}/.acme.sh/${primary_domain}_ecc/fullchain.cer"
+      ssl_cert_path="${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/fullchain.cer"
+
     fi
-    echo "密钥路径, 默认 ${HOME}/.acme.sh/${primary_domain}_ecc/${primary_domain}.key"
+    echo "密钥路径, 默认 ${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/${primary_domain}.key"
 
     read -p "请输入密钥地址：" ssl_key_path
     if [[ -z $ssl_key_path ]];then
-      ssl_key_path="${HOME}/.acme.sh/${primary_domain}_ecc/${primary_domain}.key"
+      ssl_key_path="${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/${primary_domain}.key"
     fi
 else
     echo "1.nginx（默认）"
     read -p "请选择：" user_choice
     bash "$(dirname $(dirname $0))/acme/test.sh"
     bash "$(dirname $(dirname $0))/acme/apply.sh" "nginx" "${domain_names}"
-    ssl_cert_path="${HOME}/.acme.sh/${primary_domain}_ecc/fullchain.cer"
-    ssl_key_path="${HOME}/.acme.sh/${primary_domain}_ecc/${primary_domain}.key"
+    folder_domain=$(ls ${HOME}/.acme.sh/ | grep "${primary_domain}")
+    ssl_cert_path="${HOME}/.acme.sh/${folder_domain}/fullchain.cer"
+    ssl_key_path="${HOME}/.acme.sh/${folder_domain}/${primary_domain}.key"
 fi
 
 declare config_file_name

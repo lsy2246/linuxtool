@@ -20,7 +20,6 @@ if ! command -v git &> /dev/null; then
     fi
 fi
 
-
 declare path
 echo "请输入脚本的安装位置"
 read -p "默认 /var/script：" path
@@ -69,18 +68,22 @@ update_alias() {
   if [[ -e "$file" ]]; then
     sed -i '/alias tool.*/d' "$file"
     echo "alias tool='$path/linuxtool/run.sh'" >> "$file"
-    source "$file" &> /dev/null
   fi
 }
+
+shopt -s expand_aliases
+alias tool="$path/linuxtool/run.sh"
+export -f tool 2>/dev/null || true
 
 for file in "${HOME}/.bashrc" "${HOME}/.profile" "${HOME}/.zshrc" "/etc/profile"; do
   update_alias "$file"
 done
 
-alias tool="$path/linuxtool/run.sh"
-
-
 echo "工具箱已经安装成功"
 echo "位置：${path}/linuxtool"
 echo "命令：tool"
-kill $PPID &> /dev/null
+
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  kill $PPID &> /dev/null
+fi

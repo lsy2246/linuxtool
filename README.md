@@ -1,72 +1,77 @@
-## 功能概述
+# 🛠 Linux 服务器管理工具箱
 
-### 1. Automation（自动化脚本管理）
-- **作用**：管理和执行各种自动化任务。
-- **主要文件**：
-  - `manage.sh`：用户管理脚本。
-  - `acme_update.sh`：更新 ACME 脚本和续订证书。
-  - `backup.sh`：数据备份，支持多种备份方式。
-  - `menu.sh`：交互式菜单，选择执行功能。
-  - `up-docker_compose.sh`：更新 Docker Compose 服务。
-  - `update.sh`：自动更新系统包管理器配置。
+一个功能强大的 Linux 服务器运维管理工具集,提供图形化菜单界面,简化各类运维任务。
 
-### 2. Docker（Docker 相关功能）
-- **作用**：Docker 功能和服务管理。
-- **主要文件**：
-  - `image.sh`：管理 Docker 镜像。
-  - `manage.sh`：Docker 服务管理。
-  - `source.sh`：配置 Docker 镜像源。
-  - `test.sh`：检查 Docker 安装。
-  - `alist.sh`、`gitea.sh`、`nginx-proxy-manager.sh`、`safeline.sh`、`siyuan.sh`、`typecho.sh`、`vaultwarden.sh`、`xboard.sh`：安装和配置不同 Docker 应用。
+## ✨ 主要特性
 
-### 3. Manage（系统管理）
-- **作用**：系统管理相关功能。
-- **主要文件**：
-  - `install.sh`：安装和配置系统工具。
-  - `unInstall.sh`：卸载系统工具和清理配置。
+- 🎯 智能环境检测,自动安装依赖
+- 🎨 中文交互式菜单界面
+- 📦 模块化设计,功能可扩展
+- 🔒 安全可靠,支持权限控制
+- 🚀 一键部署常用服务
 
-### 4. Other（其他功能）
-- **作用**：其他实用功能。
-- **主要文件**：
-  - `bbr_open.sh`：开启 BBR 加速。
-  - `language.sh`：更改系统语言设置。
-  - `reinstall.sh`：重新安装系统工具。
+## 🔧 核心功能
 
-### 5. User（用户管理）
-- **作用**：用户和权限管理功能。
-- **主要文件**：
-  - `key.sh`：管理 SSH 密钥。
-  - `manage.sh`：用户管理功能。
-  - `ssh.sh`：管理和配置 SSH 服务。
-  - `test.sh`：检查 SSH 客户端安装。
+### 系统管理
+- 用户账号管理
+- SSH 安全配置
+- 系统重装
+- BBR 网络加速
+- 语言环境设置
 
-### 6. Web（网页相关功能）
-- **作用**：网页相关功能。
-- **主要文件**：
-  - `acme`：SSL 证书管理脚本。
-    - `apply.sh`：申请 SSL 证书。
-    - `manage.sh`：管理已申请证书。
-    - `test.sh`：测试 SSL 证书有效性。
-  - `nginx`：Nginx 配置相关脚本。
-    - `install.sh`：安装 Nginx。
-    - `manage.sh`：管理 Nginx 配置。
-    - `test.sh`：测试 Nginx 是否正常运行。
+### Docker 应用
+一键部署以下应用:
+- Alist (文件管理)
+- Gitea (Git 服务器) 
+- Nginx Proxy Manager (反向代理)
+- Safeline (WAF 防火墙)
+- Siyuan (知识管理)
+- Typecho (博客系统)
+- Vaultwarden (密码管理)
+- XBoard (代理面板)
 
-### 7. Sources.sh（源管理）
-- **作用**：管理软件源配置。
+### SSL 证书
+- 自动申请/续期
+- HTTP/DNS 验证
+- Cloudflare API 集成
 
-### 8. VPN（VPN 管理）
-- **作用**：VPN 服务的安装
+### Web 服务
+- Nginx 配置管理
+- 站点管理
+- 反向代理设置
 
-### 9. Software（软件管理）
-- **作用**：安装常用软件包。
+### 自动化任务
+- 系统更新
+- 数据备份(支持网盘)
+- Docker 服务更新
+- 证书自动续期
 
+### 软件源管理
+- 智能切换镜像源
+- 自动更新软件源
 
-### 菜单机制
-该系统通过菜单提供用户友好的界面，允许用户选择可用脚本执行。菜单机制包括以下两个子功能：
+## 💻 安装方法
 
-#### 1. test 菜单
-- **功能**：执行特定测试脚本，验证系统功能正常。
+### 快速安装
+```bash
+wget -O install.sh https://raw.githubusercontent.com/lsy2246/linuxtool/main/install.sh && bash install.sh
+```
 
-#### 2. menu 菜单
-- **功能**：用户友好的界面，选择可用脚本执行。
+### 使用说明
+1. 运行安装脚本
+2. 选择安装位置(默认 /var/script)
+3. 重新连接终端
+4. 输入 `tool` 启动工具箱
+
+## 🔍 系统要求
+
+- 系统: Debian/Ubuntu/Arch Linux
+- 权限: root 权限
+- 内核: Linux 5.0+
+- 工具: curl/wget
+
+## 📝 问题反馈
+
+如有问题或建议:
+- 提交 Issue
+- 关注公众号: lsy22
