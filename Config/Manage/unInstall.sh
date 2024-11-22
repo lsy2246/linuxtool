@@ -15,6 +15,9 @@ for file in "${HOME}/.bashrc" "${HOME}/.profile" "${HOME}/.zshrc" "/etc/profile"
   remove_alias "$file"
 done
 
+shopt -u expand_aliases
+
+unalias tool &> /dev/null
 
 
 echo "脚本已完整卸载，公众号 lsy22 可获取一键安装脚本"

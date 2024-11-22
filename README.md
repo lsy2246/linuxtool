@@ -53,10 +53,20 @@
 ## 💻 安装方法
 
 ### 快速安装
+> GitHub 源
 ```bash
-wget -O install.sh https://raw.githubusercontent.com/lsy2246/linuxtool/main/install.sh && bash install.sh
+bash <(curl -Ls https://raw.githubusercontent.com/lsy2246/linuxtool/refs/heads/master/Config/Manage/install.sh)
 ```
 
+> Gitee 源（国内推荐）
+```bash
+bash <(curl -Ls https://gitee.com/lsy22/linuxtool/raw/master/Config/Manage/install.sh)
+```
+
+注意：
+- 请确保系统已安装 `curl` 工具
+- 需要 root 权限或 sudo 权限执行
+- 如遇到网络问题，建议国内用户使用 Gitee 源
 ### 使用说明
 1. 运行安装脚本
 2. 选择安装位置(默认 /var/script)

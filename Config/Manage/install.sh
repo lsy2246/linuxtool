@@ -73,7 +73,7 @@ update_alias() {
 
 shopt -s expand_aliases
 alias tool="$path/linuxtool/run.sh"
-export -f tool 2>/dev/null || true
+export -f tool &> /dev/null
 
 for file in "${HOME}/.bashrc" "${HOME}/.profile" "${HOME}/.zshrc" "/etc/profile"; do
   update_alias "$file"
