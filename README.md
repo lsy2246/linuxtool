@@ -50,12 +50,12 @@
 
 * **alist** ： 安装 Alist 网盘管理工具,自动配置管理员密码
 * **gitea** ： 部署 Gitea 代码托管平台,包含 MySQL 数据库配置
-* **nginx：proxy：manager** ： 安装 Nginx 可视化管理面板
+* **nginx-proxy-manager** ： 安装 Nginx 可视化管理面板
 * **safeline** ： 部署长亭 WAF 防火墙
 * **siyuan** ： 安装思源笔记服务端,支持自定义访问密码
 * **typecho** ： 部署 Typecho 博客系统,自动配置数据库
 * **vaultwarden** ： 安装密码管理器服务端,支持中文界面
-* **xboard** ： 部署支付系统面板
+* **xboard** ： 部署 xboard 面板
 
 #### Docker 管理工具
 
