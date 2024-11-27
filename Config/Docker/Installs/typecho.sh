@@ -102,7 +102,7 @@ networks: # 定义的内部网络
 EOF
 
 cd data
-wget https://github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip -O typecho.zip 
+wget https://github.com/typecho/typecho/releases/latest/download/typecho.zip -O typecho.zip 
 unzip typecho.zip 
 rm typecho.zip 
 
