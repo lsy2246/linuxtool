@@ -33,6 +33,7 @@ package_options['curl']=0
 package_options['sudo']=0
 package_options['ssh']=0
 package_options['zsh']=0
+package_options['zip']=0
 package_options['zsh-beautify']=1
 package_options['docker']=1
 package_options['x-cmd']=1

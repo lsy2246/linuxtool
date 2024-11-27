@@ -1,6 +1,13 @@
 #!/bin/bash
 declare installation_directory=$1
 declare web_service_port=$2
+
+if ! command -v zip &> /dev/null; then
+    echo "zip 未安装"
+    exit 1
+fi
+
+
 cd $installation_directory
 
 mkdir data
