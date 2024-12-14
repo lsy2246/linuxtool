@@ -29,7 +29,7 @@ else
     read -p "请选择：" user_choice
     bash "$(dirname $(dirname $0))/acme/test.sh"
     bash "$(dirname $(dirname $0))/acme/apply.sh" "nginx" "${domain_names}"
-    folder_domain=$(ls ${HOME}/.acme.sh/ | grep "${primary_domain}")
+    folder_domain=$(ls ${HOME}/.acme.sh/ | grep "^${primary_domain}" | head -n1)
     ssl_cert_path="${HOME}/.acme.sh/${folder_domain}/fullchain.cer"
     ssl_key_path="${HOME}/.acme.sh/${folder_domain}/${primary_domain}.key"
 fi

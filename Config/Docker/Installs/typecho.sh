@@ -15,7 +15,7 @@ mkdir php
 mkdir -p nginx/conf
 
 cat > "./php/Dockerfile" << 'EOF'
-FROM php:fpm
+FROM php:8.2-fpm
 
 # 更新包列表并安装 pdo_mysql 扩展
 RUN apt-get update && \
