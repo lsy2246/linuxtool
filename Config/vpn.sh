@@ -6,7 +6,7 @@ declare user_choice
 
 vpn_commands["v2ray"]='bash <(curl -s -L https://git.io/v2ray.sh)'
 vpn_commands["v2ray-agent"]='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh'
-vpn_commands["x-ui"]='bash <(curl -Ls https://raw.githubusercontent.com/FranzKafkaYu/x-ui/master/install.sh)'
+vpn_commands["3-ui"]='bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)'
 vpn_commands["V2bX"]='wget -N https://raw.githubusercontent.com/wyx2685/V2bX-script/master/install.sh && bash install.sh'
 
 for i in "${!vpn_commands[@]}";do
