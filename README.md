@@ -70,6 +70,7 @@
 * **bbr_open** ： 开启 BBR 网络加速
 * **language** ： 系统语言切换(中英文)
 * **reinstall** ： 系统重装工具
+* **info** ： 系统信息
 
 #### 用户管理 (User)
 
