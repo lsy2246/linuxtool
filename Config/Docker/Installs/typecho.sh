@@ -108,11 +108,11 @@ rm typecho.zip
 
 cd $installation_directory
 
-sudo chown -R 1000:1000 $installation_directory
+chown -R 1000:1000 $installation_directory
 
-sudo chmod -R 777 data
+chmod -R 777 data
 
-sudo docker compose up -d
+docker compose up -d
 
 echo "数据库地址：mysql"
 echo "数据库用户名：root"

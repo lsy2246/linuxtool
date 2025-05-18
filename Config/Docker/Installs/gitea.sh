@@ -1,18 +1,16 @@
 #!/bin/bash
 
-if ! command -v sudo &> /dev/null; then
-    echo "该软件需要安装sudo才能正常安装"
-    exit
-fi
-
 declare install_path=$1
 declare service_port=$2
 
-sudo useradd -m git
-sudo -u git ssh-keygen -t rsa -b 4096 -C "Gitea Host Key" -f /home/git/.ssh/id_rsa -N ""
-sudo -u git sh -c 'cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys'
-sudo -u git sh -c 'chmod a+x /usr/local/bin/gitea'
-sudo -u git sh -c 'echo "ssh -p '$(( service_port+22 ))' -o StrictHostKeyChecking=no git@127.0.0.1 \"SSH_ORIGINAL_COMMAND=\\\"\$SSH_ORIGINAL_COMMAND\\\" \$0 \$@\"" > /usr/local/bin/gitea'
+useradd -m git
+
+su - git -c "ssh-keygen -t rsa -b 4096 -C \"Gitea Host Key\" -f /home/git/.ssh/id_rsa -N \"\""
+su - git -c "cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys"
+echo "ssh -p $(( service_port+22 )) -o StrictHostKeyChecking=no git@127.0.0.1 \"SSH_ORIGINAL_COMMAND=\\\"\$SSH_ORIGINAL_COMMAND\\\" \$0 \$@\"" > /usr/local/bin/gitea
+chown git:git /usr/local/bin/gitea
+su - git -c "chmod a+x /usr/local/bin/gitea"
+
 declare user_id=$( id git | awk -F'[=() ]+' '{print $2}' )
 declare group_id=$( id git | awk -F'[=() ]+' '{print $5}' )
 
@@ -60,5 +58,4 @@ services:
       - ./mysql:/var/lib/mysql
 EOF
 chown -R git:git $install_path
-sudo docker compose up -d
-
+docker compose up -d

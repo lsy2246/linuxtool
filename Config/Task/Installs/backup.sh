@@ -43,11 +43,11 @@ fi
 
 if [[ ! $baidu_backup_choice =~ [Nn] ]];then
   if [[ -f "/usr/bin/apt-get" ]];then
-     sudo apt-get install python3-venv -y
+     apt-get install python3-venv -y
   elif [[ -f "/usr/bin/apt" ]];then
-     sudo apt-get install python3-venv -y
+     apt-get install python3-venv -y
   elif [[ -f "/usr/bin/pacman" ]];then
-       sudo pacman -Sy python3-venv --noconfirm
+       pacman -Sy python3-venv --noconfirm
   else
      echo "无法自动安装 python3-venv，请手动安装"
      exit

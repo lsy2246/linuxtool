@@ -15,7 +15,7 @@ cat > "${docker_compose_path}/up-docker_compose.sh" << EOF
 #!/bin/bash
 for dir in "${data_directory}"/*/; do
         cd "\$dir" || exit
-        sudo docker compose pull
-        sudo docker compose up -d
+        docker compose pull
+        docker compose up -d
 done
 EOF

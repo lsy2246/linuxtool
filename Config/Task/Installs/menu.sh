@@ -17,9 +17,10 @@ done
 echo "输入其他任意值返回主页"
 read -p "请输入：" user_choice
 
-if [[ ! ${user_choice} =~ [1-$file_count] ]];then
+if [[ ! "$user_choice" =~ ^[0-9]+$ ]] || [ "$user_choice" -lt 1 ] || [ "$user_choice" -gt "$file_count" ]; then
   exit
 fi
+
 
 read -p "请输入脚本存放路径（默认：/var/script）：" script_path
 

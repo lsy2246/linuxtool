@@ -44,7 +44,7 @@ if [[ $local_path != $script_path  ]]; then
 fi
 
 read -p "请输入要使用的功能：" user_choice
-if [[ "${user_choice}" =~ [1-${#function_array[*]}] ]];then
+if [[ "$user_choice" =~ ^[0-9]+$ ]] && [ "$user_choice" -ge 1 ] && [ "$user_choice" -le "${#function_array[*]}" ]; then
     clear
     if [[ -d "${local_path}/${function_array[$user_choice]}" ]]; then
       local_path="${local_path}/${function_array[$user_choice]}"
