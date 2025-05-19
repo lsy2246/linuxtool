@@ -70,9 +70,6 @@ if [[ "$user_choice" =~ ^[0-9]+$ ]] && [ "$user_choice" -ge 1 ] && [ "$user_choi
       fi
       local_path=$script_path
     fi
-    if [[ $? -eq 1 ]]; then
-        echo "${selected_script}可能运行失败了"
-    fi
 else
   if [[ $local_path == $script_path ]]; then
       exit
