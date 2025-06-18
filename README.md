@@ -21,7 +21,7 @@
 国内用户推荐使用 Gitee 源:
 
 ```bash
- bash <(curl -Ls https://gitee.com/lsy22/linuxtool/raw/master/Config/Manage/install.sh)
+ bash <(curl -Ls tool.lsy22.com/cn)
 ```
 
 国外用户可以使用 GitHub 源:
