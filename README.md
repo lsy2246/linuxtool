@@ -21,7 +21,7 @@
 国内用户推荐使用 Gitee 源:
 
 ```bash
- bash <(curl -Ls tool.lsy22.com/cn)
+ bash <(curl -Ls cn.tool.lsy22.com)
 ```
 
 国外用户可以使用 GitHub 源:
