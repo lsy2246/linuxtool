@@ -11,33 +11,33 @@ echo "2.手动输入"
 read -p "请输入选择：" user_choice
 if [[ $user_choice == 2 ]]; then
 
-    folder_domain=$(ls ${HOME}/.acme.sh/ | grep "^${primary_domain}" | head -n1)
-    echo "证书路径, 默认 ${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/fullchain.cer"
-    read -p "请输入证书地址：" ssl_cert_path
-    if [[ -z $ssl_cert_path ]];then
-      ssl_cert_path="${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/fullchain.cer"
+  folder_domain=$(ls ${HOME}/.acme.sh/ | grep "^${primary_domain}" | head -n1)
+  echo "证书路径, 默认 ${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/fullchain.cer"
+  read -p "请输入证书地址：" ssl_cert_path
+  if [[ -z $ssl_cert_path ]]; then
+    ssl_cert_path="${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/fullchain.cer"
 
-    fi
-    echo "密钥路径, 默认 ${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/${primary_domain}.key"
+  fi
+  echo "密钥路径, 默认 ${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/${primary_domain}.key"
 
-    read -p "请输入密钥地址：" ssl_key_path
-    if [[ -z $ssl_key_path ]];then
-      ssl_key_path="${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/${primary_domain}.key"
-    fi
+  read -p "请输入密钥地址：" ssl_key_path
+  if [[ -z $ssl_key_path ]]; then
+    ssl_key_path="${HOME}/.acme.sh/${folder_domain:-"${primary_domain}_ecc"}/${primary_domain}.key"
+  fi
 else
-    echo "1.nginx（默认）"
-    read -p "请选择：" user_choice
-    bash "$(dirname $(dirname $0))/acme/test.sh"
-    bash "$(dirname $(dirname $0))/acme/apply.sh" "nginx" "${domain_names}"
-    folder_domain=$(ls ${HOME}/.acme.sh/ | grep "^${primary_domain}" | head -n1)
-    ssl_cert_path="${HOME}/.acme.sh/${folder_domain}/fullchain.cer"
-    ssl_key_path="${HOME}/.acme.sh/${folder_domain}/${primary_domain}.key"
+  echo "1.nginx（默认）"
+  read -p "请选择：" user_choice
+  bash "$(dirname $(dirname $0))/acme/_init.sh"
+  bash "$(dirname $(dirname $0))/acme/apply.sh" "nginx" "${domain_names}"
+  folder_domain=$(ls ${HOME}/.acme.sh/ | grep "^${primary_domain}" | head -n1)
+  ssl_cert_path="${HOME}/.acme.sh/${folder_domain}/fullchain.cer"
+  ssl_key_path="${HOME}/.acme.sh/${folder_domain}/${primary_domain}.key"
 fi
 
 declare config_file_name
 read -p "请输入配置文件名（默认为域名）：" config_file_name
 if [[ -z $config_file_name ]]; then
-    config_file_name=$primary_domain
+  config_file_name=$primary_domain
 fi
 
 echo "工作方式选择"
@@ -47,7 +47,7 @@ read -p "请选择：" user_choice
 declare site_path
 if [[ $user_choice == 2 ]]; then
   read -p "请输入要代理的站点路径：" site_path
-  cat > "/etc/nginx/sites-available/${config_file_name}.conf" << EOF
+  cat >"/etc/nginx/sites-available/${config_file_name}.conf" <<EOF
 server {
   listen 443 ssl http2;  # 监听 443 端口并启用 SSL 和 HTTP/2
   server_name ${domain_names};  # 替换为你的域名
@@ -116,9 +116,9 @@ EOF
 else
   read -p "请输入后端服务器的地址，如果只输入数字代表端口：" site_path
   if [[ $site_path =~ [0-9]+ ]]; then
-      site_path="http://127.0.0.1:${site_path}"
+    site_path="http://127.0.0.1:${site_path}"
   fi
-  cat > "/etc/nginx/sites-available/${config_file_name}.conf" << EOF
+  cat >"/etc/nginx/sites-available/${config_file_name}.conf" <<EOF
 server {
   listen 443 ssl http2;  # 监听 443 端口，并启用 HTTP/2
   server_name ${domain_names};  # 替换为你的域名
@@ -215,6 +215,6 @@ server {
 
 EOF
 fi
-ln -s "/etc/nginx/sites-available/${config_file_name}.conf" "/etc/nginx/sites-enabled" &> /dev/null
-nginx -s reload &> /dev/null
+ln -s "/etc/nginx/sites-available/${config_file_name}.conf" "/etc/nginx/sites-enabled" &>/dev/null
+nginx -s reload &>/dev/null
 echo "配置完成"
